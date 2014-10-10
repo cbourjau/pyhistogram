@@ -19,37 +19,58 @@ The bin container class does not deal with the finding of bins in user defined u
 deals with bin numbers and leaves the user defined bin sizes and units to the axis class
 """
 
-class _Bin_container(object):
+from math import sqrt
+
+
+class Bin_container(object):
     def __init__(self, nxbins, nybins=1, nzbins=1):
         # check input values
         if (nxbins < 1 or nybins < 1 or nzbins < 1) or (nybins == 1 and nzbins > 1):
             raise ValueError('Invalid number of bins given')
         self.I, self.J, self.K = nxbins, nybins, nzbins
-        # Each bin has (value, error)
-        self._bins = [[0, 0]] * self.I*self.J*self.K
+        # Each bin has (value, sum_w2)
+        self._bins = [[0, 0] for i in range(self.I*self.J*self.K)]
 
-    def get_nglobal(self):
+    def get_number_of_bins(self):
         return len(self._bins)
 
-    def find_global_bin_from_ijk(self, i, j=1, k=1):
+    def get_global_bin_from_ijk(self, i, j=1, k=1):
         """i, j, k the bin numbers on the x, y and z axis. They are element of [1, N]
         where N is I, J, or K respectivly
         """
         return ((k - 1) * self.J + j - 1) * self.I + i
 
+    def get_ijk_from_global_bin(self, gidx):
+        """return (i, j, k)"""
+        # imagine a 3d block of bins curled up in a 1D array with above formular.
+        # Work with mod to find the "layer of the current bin
+        z_level, rem = divmod(gidx, self.I*self.J)
+        # check if the last level is exactly full or if the next level is started:
+        k = z_level + 1 if rem > 0 else z_level
+
+        y_level, rem = divmod(rem, self.I)
+        j = y_level + 1 if rem > 0 else y_level
+        # import ipdb; ipdb.set_trace()
+
+        i = rem if rem > 0 else self.I
+
+        return i, j, k
+
     def fill_bin(self, global_bin_number, weight=1):
-        self._bins[global_bin_number][0] += weight
+        # remember the -1 to convert bin number to index!
+        self._bins[global_bin_number - 1][0] += weight
 
-    def _get_bin_contents(self, with_errors=False):
-        # if 1D:
-        if self.J == self.K == 1:
-            if with_errors:
-                return self._bins
-            else:
-                return [v[0] for v in self._bins]
+    def get_bin_content(self, gidx):
+        # remember, gidx starts at 1!
+        return self._bins[gidx-1][0]
 
-        # if 2D or 3D
-        else:
-            raise NotImplementedError
+    def set_bin_content(self, gidx, v):
+        """Replace the bin's content"""
+        self._bins[gidx-1][0] = v
 
+    def get_bin_error(self, gidx):
+        return sqrt(self._bins[gidx][1])
             
+    def set_bin_error(self, gidx, e):
+        """Replace the bin's error"""
+        self._bins[gidx][1] = e

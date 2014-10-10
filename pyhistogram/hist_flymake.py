@@ -69,6 +69,10 @@ class Hist1D(object):
         between individual axes nor under and overflow is implemented atm"""
         return self.overflow
 
+    def get_bin_contents(self):
+        pass
+        #return self.Bin_container.get_bin_content()
+
     def bins(self):
         """return iterator over all bins in histogram"""
         n_total = self.Bin_container.get_number_of_bins()
@@ -81,15 +85,15 @@ class Hist1D(object):
         Plot the current histogram. This requires matplotlib to be installed.
         kwargs are passed on to the bar() function of matplotlib
         return: return value of bar()
-        """
         try:
             import matplotlib.pyplot as plt
         except ImportError:
             print 'matplotlib is needed for plotting functionality'
             return None
-
         values = [bin.value for bin in self.bins()]
         center = [bin.x.center for bin in self.bins()]
         width = [bin.x.width for bin in self.bins()]
+
         return plt.bar(center, values, align='center', width=width, **kwargs)
+
         
