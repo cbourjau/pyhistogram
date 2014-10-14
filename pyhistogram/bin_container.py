@@ -31,7 +31,8 @@ class Bin_container(object):
         # Each bin has (value, sum_w2)
         self._bins = [[0, 0] for i in range(self.I*self.J*self.K)]
 
-    def get_number_of_bins(self):
+    @property
+    def nbins(self):
         return len(self._bins)
 
     def get_global_bin_from_ijk(self, i, j=1, k=1):

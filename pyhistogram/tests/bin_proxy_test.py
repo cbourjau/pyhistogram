@@ -1,6 +1,9 @@
 from pyhistogram import Hist1D
 from pyhistogram.bin_proxy import Bin_proxy
+from pyhistogram.utils import UTC
+
 import unittest
+from datetime import datetime
 
 
 class Test_Bin_proxy(unittest.TestCase):
@@ -39,3 +42,13 @@ class Test_Bin_proxy(unittest.TestCase):
         self.assertEqual([b.x.low for b in h.bins()], [0, 1, 2, 3, 4])
         self.assertEqual([b.x.high for b in h.bins()], [1, 2, 3, 4, 5])
         self.assertEqual([b.x.center for b in h.bins()], [.5, 1.5, 2.5, 3.5, 4.5])
+
+    def test_iterating_through_edges_with_datetime(self):
+        h = Hist1D(4, datetime(2014, 1, 1, 12, 0), datetime(2014, 1, 1, 16, 0))
+        utc = UTC()
+        self.assertEqual(h.Xaxis.get_bin_edges(),
+                         [datetime(2014, 1, 1, 12, 0, tzinfo=utc),
+                          datetime(2014, 1, 1, 13, 0, tzinfo=utc),
+                          datetime(2014, 1, 1, 14, 0, tzinfo=utc),
+                          datetime(2014, 1, 1, 15, 0, tzinfo=utc),
+                          datetime(2014, 1, 1, 16, 0, tzinfo=utc)])

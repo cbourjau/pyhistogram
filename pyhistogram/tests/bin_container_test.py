@@ -11,19 +11,19 @@ class Test_bin_container(unittest.TestCase):
 
     def test_1D(self):
         bc = Bin_container(2)
-        self.assertEqual(bc.get_number_of_bins(), 2)
+        self.assertEqual(bc.nbins, 2)
         self.assertEqual(bc.get_global_bin_from_ijk(1), 1)
 
     def test_2D(self):
         bc = Bin_container(2, 2)
-        self.assertEqual(bc.get_number_of_bins(), 4)
+        self.assertEqual(bc.nbins, 4)
         self.assertEqual(bc.get_global_bin_from_ijk(2, 1), 2)
         self.assertEqual(bc.get_global_bin_from_ijk(1, 2), 3)
         self.assertEqual(bc.get_global_bin_from_ijk(2, 2), 4)
 
     def test_3D(self):
         bc = Bin_container(2, 2, 2)
-        self.assertEqual(bc.get_number_of_bins(), 8)
+        self.assertEqual(bc.nbins, 8)
         self.assertEqual(bc.get_global_bin_from_ijk(2, 1, 1), 2)
         self.assertEqual(bc.get_global_bin_from_ijk(1, 2, 1), 3)
         self.assertEqual(bc.get_global_bin_from_ijk(1, 1, 2), 5)
