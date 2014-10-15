@@ -7,6 +7,7 @@ from pyhistogram.flow_exceptions import OverflowException, UnderflowException
 import unittest
 from datetime import datetime
 
+
 class Test_Axis(unittest.TestCase):
     def setUp(self):
         self.hist = Hist1D(10, 0, 1)
@@ -51,3 +52,18 @@ class Test_Axis(unittest.TestCase):
         # overflow
         self.assertRaises(OverflowException, a.find_axis_bin,
                           datetime(2014, 1, 1, 15, 0))
+
+
+class Test_Axis_strings(unittest.TestCase):
+        def setUp(self):
+            self.hist = Hist1D(['My', 'name', 'is', 'Bond'])
+
+        def test_find_bin(self):
+            [self.hist.fill(s) for s in ['James', 'Bond']]
+            v = [(b.x.regex, b.value) for b in self.hist.bins()]
+            self.assertEqual(v,
+                             [('My', 0), ('name', 0), ('is', 0), ('Bond', 1)])
+            [self.hist.fill(s) for s in ['NAME', 'bond']]
+            v = [(b.x.regex, b.value) for b in self.hist.bins()]
+            self.assertEqual(v,
+                             [('My', 0), ('name', 1), ('is', 0), ('Bond', 2)])

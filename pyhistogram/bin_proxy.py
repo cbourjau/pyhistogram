@@ -86,10 +86,16 @@ class Bin_proxy(object):
             self.__class__.__name__, self.hist, self.gidx)
 
     def axis_bininfo(self, ax, ax_idx):
-        class bi:
-            axis = self.hist.axes[ax]
-            low = axis.get_bin_low_edge(ax_idx)
-            center = axis.get_bin_center(ax_idx)
-            high = axis.get_bin_up_edge(ax_idx)
-            width = axis.get_bin_width(ax_idx)
-        return bi
+        if self.hist.axes[ax].dtype != 'regex':
+            class bi:
+                axis = self.hist.axes[ax]
+                low = axis.get_bin_low_edge(ax_idx)
+                center = axis.get_bin_center(ax_idx)
+                high = axis.get_bin_up_edge(ax_idx)
+                width = axis.get_bin_width(ax_idx)
+            return bi
+        else:
+            class bi:
+                axis = self.hist.axes[ax]
+                regex = axis.get_bin_regex(ax_idx).pattern
+            return bi
