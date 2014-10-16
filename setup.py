@@ -10,10 +10,11 @@ setup(
     license=open('LICENSE.txt').read(),
     long_description=open('README.rst').read(),
     url='https://github.com/chrisboo/pyhistogram',
-    keywords=['histogram'],
+    download_url='https://github.com/chrisboo/pyhistogram/tarball/0.1',
+    keywords=['histogram', 'statistics'],
     classifiers=[
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.7",
         "License :: OSI Approved :: GPL License",
         "Operating System :: OS Independent",
         "Intended Audience :: Developers",
@@ -27,6 +28,5 @@ setup(
     extras_require={
         'plotting':  ["matplotlib"]
     },
-    test_suite='simplehist.tests',
-    zip_safe=False,
+    test_suite='pyhistogram.tests',
 )
