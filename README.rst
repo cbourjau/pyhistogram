@@ -18,8 +18,8 @@ Taking it for a spin:
 
 Creating  histograms:
 ---------------------
-
 ::
+
   from pyhistogram import Hist1D
 
   # 1D histogram with fixed-width bins
@@ -30,7 +30,6 @@ Creating  histograms:
 
 Histograms can be filled in loops:
 ----------------------------------
-
 ::
 
   >>> import random
@@ -63,7 +62,6 @@ A weight can be associated to each value in a 2-tuple:
 
 datetime support is also no-brainer:
 ------------------------------------
-
 ::
 
   from datetime import datetim
@@ -73,7 +71,6 @@ datetime support is also no-brainer:
 
 If matplotlib is available, a histogram can also be plotted conveniently:
 -------------------------------------------------------------------------
-
 ::
 
   from pyhistogram import Hist1D
