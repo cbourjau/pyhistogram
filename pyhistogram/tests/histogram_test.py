@@ -3,6 +3,7 @@ from pyhistogram.utils import UTC
 import unittest
 from datetime import datetime
 
+
 class Test_Hist_1D(unittest.TestCase):
     def test_init_fixed_width(self):
         h = Hist1D(4, 0, 4)
@@ -12,7 +13,8 @@ class Test_Hist_1D(unittest.TestCase):
 
         # float sized bins:
         h = Hist1D(4, 0, 1)
-        self.assertEqual(h.Xaxis.get_bin_centers(), [0.125, 0.375, 0.625, 0.875])
+        self.assertEqual(h.Xaxis.get_bin_centers(),
+                         [0.125, 0.375, 0.625, 0.875])
 
     def test_init_variable_width(self):
         h = Hist1D([0, 1, 3, 4])
