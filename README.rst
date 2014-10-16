@@ -2,12 +2,12 @@
 pyhistogram
 ===========
 
-**This is an early release which is not yet battle-hardened. Please file an issue over at github if you encounter problems**
+**This is an early release which is not yet battle-nnnhardened. Please file an issue over at github if you encounter problems**
 
 What is pyhistogram
 ===================n
 
-pyhistogram is a pure python package for easy handling of histogram data. It offers much more functionality than pythons build in cumulative features. 
+pyhistogram is a pure python package for easy handling of histogram data. It offers much more functionality than pythons build-in 'collections' feature. 
 
 pyhistogram interface is heavily inspired by the excellent rootpy package which, however, depends on the gigantic particle physics ROOT framework - an dependency hardly justifiable for small projects. At the moment pyhistogram has no dependencies at all. Matplotlib is optional if one wants to use the built in plotting features. Than also means that this packages performance is nowhere near to that of the rootpy/ROOT solution, but should be sufficient for most use cases. In any case, it is quite possible that numpy might be added as an dependency in the future to use some of its features and to give this package a performance boost. 
 
