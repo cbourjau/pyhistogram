@@ -59,7 +59,7 @@ class Hist1D(object):
         else:
             gbin_number = self.Bin_container.get_global_bin_from_ijk(
                 xbin_number, ybin_number, zbin_number)
-            self.Bin_container.fill_bin(gbin_number)
+            self.Bin_container.fill_bin(gbin_number, weight=weight)
  
     def get_overflow(self):
         """return overflow of the entire histogram. No differentiation

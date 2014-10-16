@@ -49,4 +49,12 @@ class Test_Hist_1D(unittest.TestCase):
                           datetime(2014, 1, 1, 14, 0, tzinfo=utc),
                           datetime(2014, 1, 1, 15, 0, tzinfo=utc),
                           datetime(2014, 1, 1, 16, 0, tzinfo=utc)])
-        
+
+    def test_filling_with_weights(self):
+        h = Hist1D(4, 0, 4)
+        h.fill(2.1, weight=2)
+        self.assertEqual([b.value for b in h.bins()], [0, 0, 2, 0])
+        start, end = datetime(2014, 1, 1, 12, 0), datetime(2014, 1, 1, 16, 0)
+        h = Hist1D(4, start, end)
+        h.fill(start, weight=2)
+        self.assertEqual([b.value for b in h.bins()], [2, 0, 0, 0])
