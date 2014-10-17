@@ -3,11 +3,10 @@ from setuptools import setup
 setup(
     name='pyhistogram',
     version='0.1',
-    description="Simple histogram classes, with minimal dependencies",
+    description="Convinient and intuitive histograms with minimal dependencies",
     author='Christian Bourjau',
     author_email='c.bourjau@gmx.net',
     packages=['pyhistogram', 'pyhistogram.tests'],
-    license=open('LICENSE.txt').read(),
     long_description=open('README.rst').read(),
     url='https://github.com/chrisboo/pyhistogram',
     download_url='https://github.com/chrisboo/pyhistogram/tarball/0.1',
@@ -21,7 +20,7 @@ setup(
         "Intended Audience :: Science/Research",
         "Topic :: Scientific/Engineering :: Mathematics",
         "Topic :: Scientific/Engineering :: Physics",
-        "Development Status :: 3 - Alpha,"
+        "Development Status :: 3 - Alpha",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     # install_requires=['numpy', 'matplotlib'],

@@ -5,7 +5,7 @@ pyhistogram
 **This is an early release which is not yet battle-nnnhardened. Please file an issue over at github if you encounter problems**
 
 What is pyhistogram
-===================n
+===================
 
 pyhistogram is a pure python package for easy handling of histogram data. It offers much more functionality than pythons build-in 'collections' feature. 
 
