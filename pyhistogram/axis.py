@@ -11,27 +11,44 @@ import re
 
 
 def _convert_datetimes_to_unix_time(v):
-    """Convert the given value or list of values to unix time stamps,
-    if appropriate.
-    return: v_converted, dtype ['numerical'|'datetime']
+    """Convert the given datetime or list of datetimes to unix time stamps.
+
+    If v is not a datetime, return it unchanged
+    
+    Parameters
+    ----------
+    v : datetime
+       The datetime to be converted. Its assumed that it is given in utc.
+       If it is not of type datetime, return the value unchanged
+
+    Return
+    ------
+    int (if datetime was given) or initial type of v
     """
     if isinstance(v, list) and isinstance(v[0], datetime):
         v_conv = []
-        dtype = 'datetime'
         for a in v:
             v_conv.append(timegm(a.timetuple()))
     elif isinstance(v, datetime):
         v_conv = timegm(v.timetuple())
-        dtype = 'datetime'
     else:
         v_conv = v
-        dtype = 'numerical'
     return v_conv
 
 
 def _establish_dtype(v):
-    """v: value or list of values to be used as edges for the axis
-    return: type of the values ['numerical'|'datetime'|'regex']"""
+    """Returns the type of the bin edges on this axis
+
+    Parameters
+    ----------
+    v : str or int or float or datetime or list
+       Value or list of values to be used as edges for the axis
+
+    Return
+    ------
+    str :
+       {'numerical'|'datetime'|'regex'}
+    """
     if isinstance(v, (list, tuple)):
         v = list(v)
     if all(isinstance(x, (float, int)) for x in v):
@@ -44,13 +61,36 @@ def _establish_dtype(v):
         raise ValueError('Inconsitancy in given types')
 
 
-class _Axis(object):
-    # Are the edges datetimes in unix format or numerical values
+class Axis(object):
+    """The Axis is the container for all the functions specific to one
+    particular dimension of the histogram.
+
+    E.g. the type of the edge values, number of bins etc.
+    """
     def __init__(self, hist, *args):
         """
-        args: either one argument: bin_edges
-              or  three arguments: nbins, lowerset, highest
-        hist: the parent-histogram of this axis
+        Initialization of a new axis
+
+        Parameters
+        ----------
+        hist : Hist
+           The histogram to which this axis belongs
+        args : array_like
+           Either:
+              * Only element of type list it gives the bin edges
+              * Three elements: nbins (int), lowest bound, highest bound
+
+        Example
+        -------
+        Initialization with bin edges
+
+        >>> ax = Axis(hist, [1, 4, 9])
+        >>> ax = Axis(hist, ['My', 'name', 'is', 'Bond']])
+
+        Initialization with number of bins (10), lowest (0) and highest bound (1)
+
+        >>> ax = Axis(hist, 10, 0, 1)
+
         """
         self.hist = hist
         # variable bin width or string of regexes
@@ -61,7 +101,7 @@ class _Axis(object):
                 # check if edges are sane
                 if len(self.edges) < 2:
                     raise ValueError('Too few edges given')
-                if not strictly_increasing(self.edges):
+                if not _strictly_increasing(self.edges):
                     raise ValueError('Bin edges not monotonically increasing')
             if self.dtype == 'regex':
                 self.edges = [re.compile(s, re.IGNORECASE) for s in args[0]]
@@ -88,37 +128,130 @@ class _Axis(object):
         else:
             self.find_axis_bin = self._find_axis_bin_numerical
 
-
     @property
     def nbins(self):
+        """Returns the number of bins along this axis.
+
+        Return
+        ------
+        int
+        """
         return len(self.edges) - 1
 
     def get_bin_centers(self):
+        """Returns the centers of the bins along this axis.
+
+        This function is not available if the axis is of type 'regex'.
+
+        Return
+        ------
+        array_like
+        """
         return convert_to_dtype(
             [l + (u - l) / 2.0 for l, u in zip(self.edges, self.edges[1:])],
             self.dtype)
 
     def get_bin_regex(self, i):
+        """Return the regexes for each bin along this axis.
+
+        This function is not available if the axis is of type datetime, numerical
+
+        Parameters
+        ----------
+        i : int
+           Axis bin number
+
+        Return
+        ------
+        array_like
+        """
         return self.edges[i-1]
 
     def get_bin_edges(self, convert=True):
+        """Returns the edges of the bins along this axis.
+
+        This function is not available if the axis is of type 'regex'.
+
+        Parameters
+        ----------
+        convert : bool
+           If true, the returned value will be converted to the appropriate type of the axis (e.g. datetime)
+
+        Return
+        ------
+        array_like :
+           The length of this array is nbins + 1
+        """
         if convert:
             return convert_to_dtype(self.edges, self.dtype)
         else:
             return self.edges
 
     def get_bin_low_edge(self, i, convert=True):
+        """Returns only the lower bin edges of the bins along this axis.
+
+        This function is not available if the axis is of type 'regex'.
+
+        Parameters
+        ----------
+        convert : bool
+           If true, the returned value will be converted to the appropriate type of the axis (e.g. datetime)
+
+        Return
+        ------
+        array_like
+        """
         return self.get_bin_edges(convert)[i-1]
 
     def get_bin_up_edge(self, i, convert=True):
+        """Returns only the upper bin edge of for a given axis-bin number.
+
+        This function is not available if the axis is of type 'regex'.
+
+        Parameters
+        ----------
+        convert : bool
+           If true, the returned value will be converted to the appropriate type of the axis (e.g. datetime)
+
+        Return
+        ------
+        array_like
+        """
         return self.get_bin_edges(convert)[i]
 
     def get_bin_center(self, i):
+        """Returns the center of the given bin, if appropriate converted
+        to the axis's type.
+
+        This function is not available if the axis is of type 'regex'.
+
+        Parameters
+        ----------
+        i : int
+           Axis bin number
+
+        Return
+        ------
+        float or datetime
+        """
         low = self.get_bin_low_edge(i, convert=False)
         high = self.get_bin_up_edge(i, convert=False)
         return convert_to_dtype(low + (high - low) / 2.0, self.dtype)
 
     def get_bin_width(self, i):
+        """Returns the width of the given bin in the appropriate type.
+
+        This function is not available if the axis is of type 'regex'.
+
+        Parameters
+        ----------
+        i : int
+           Axis bin number
+
+        Return
+        ------
+        float or datetime
+        """
         low = self.get_bin_low_edge(i)
         high = self.get_bin_up_edge(i)
         return high - low
@@ -130,7 +263,8 @@ class _Axis(object):
         """
         # generator returning the first match for an index
         v = _convert_datetimes_to_unix_time(v)
-        gen = (i for i, (l, u) in enumerate(zip(self.edges, self.edges[1:])) if l <= v < u)
+        gen = (i for i, (l, u) in
+               enumerate(zip(self.edges, self.edges[1:])) if l <= v < u)
         try:
             index = gen.next()
         except StopIteration:
@@ -154,5 +288,5 @@ class _Axis(object):
         return index + 1
 
 
-def strictly_increasing(L):
+def _strictly_increasing(L):
     return all(x < y for x, y in zip(L, L[1:]))
