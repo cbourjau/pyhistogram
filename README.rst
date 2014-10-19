@@ -2,7 +2,7 @@
 pyhistogram
 ===========
 
-**This is an early release which is not yet battle-nnnhardened. Please file an issue over at github if you encounter problems**
+**This is an early release which is not yet battle-hardened. Please file an issue over at github if you encounter problems**
 
 What is pyhistogram
 ===================
@@ -22,7 +22,8 @@ The following shows some, but by far not all features. A proper documentation is
 Installing pyhistogram:
 -----------------------
 ::
-   pip install pyhistogram
+
+   $ pip install pyhistogram
 
 
 Creating  histograms:
@@ -79,7 +80,7 @@ datetime support is also no-brainer:
 
 
 And even word frequencies (based on regex) are all there for your convenience:
--------------------------------------------------------------
+------------------------------------------------------------------------------
 ::
 
    >>> hist = Hist1D(['My', 'name', 'is', 'Bond'])
