@@ -1,1 +1,1 @@
-from pyhistogram.hist import Hist1D
+from pyhistogram.hist import Hist, Hist1D

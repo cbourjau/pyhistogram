@@ -1,7 +1,7 @@
 """Test the behavior of the Axis class"""
 
 from pyhistogram.axis import Axis
-from pyhistogram.hist import Hist1D
+from pyhistogram.hist import Hist
 from pyhistogram.flow_exceptions import OverflowException, UnderflowException
 
 import unittest
@@ -10,7 +10,7 @@ from datetime import datetime
 
 class Test_Axis(unittest.TestCase):
     def setUp(self):
-        self.hist = Hist1D(10, 0, 1)
+        self.hist = Hist(10, 0, 1)
 
     def test_init_with_contradictory_args(self):
         # decreasing or equal edges
@@ -42,8 +42,8 @@ class Test_Axis(unittest.TestCase):
 
     def test_find_bin_datetime(self):
         a = Axis(self.hist, [datetime(2014, 1, 1, 12, 0),
-                              datetime(2014, 1, 1, 13, 0),
-                              datetime(2014, 1, 1, 14, 0)])
+                             datetime(2014, 1, 1, 13, 0),
+                             datetime(2014, 1, 1, 14, 0)])
         self.assertEqual(a.find_axis_bin(datetime(2014, 1, 1, 12, 0)), 1)
         self.assertEqual(a.find_axis_bin(datetime(2014, 1, 1, 12, 30)), 1)
         # underflow
@@ -56,7 +56,7 @@ class Test_Axis(unittest.TestCase):
 
 class Test_Axis_strings(unittest.TestCase):
         def setUp(self):
-            self.hist = Hist1D(['My', 'name', 'is', 'Bond'])
+            self.hist = Hist(['My', 'name', 'is', 'Bond'])
 
         def test_find_bin(self):
             [self.hist.fill(s) for s in ['James', 'Bond']]

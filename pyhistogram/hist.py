@@ -6,10 +6,9 @@ from pyhistogram.axis import Axis
 from pyhistogram.bin_container import Bin_container
 from pyhistogram.flow_exceptions import OverflowException, UnderflowException
 from pyhistogram.bin_proxy import Bin_proxy
-from datetime import datetime
 
 
-class Hist1D(object):
+class Hist(object):
     def __init__(self, *args):
         """Initialization of a one dimensional histogram
 
@@ -80,7 +79,7 @@ class Hist1D(object):
 
         Example
         -------
-        >>> h = Hist1D(10, 0, 1)
+        >>> h = Hist(10, 0, 1)
         >>> h.fill(2.5, weight=0.5)
         """
         try:
@@ -155,3 +154,9 @@ class Hist1D(object):
             width = [bin.x.width for bin in self.bins()]
             ret =  plt.bar(center, values, align='center', width=width, **kwargs)  
         return ret
+
+
+def Hist1D(*args, **kwargs):
+    from warnings import warn
+    warn("Hist1D is deprecated in favor of Hist")
+    return Hist(*args, **kwargs)

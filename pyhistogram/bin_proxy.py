@@ -11,7 +11,7 @@ class Bin_proxy(object):
 
         Parameters
         ----------
-        hist : pyhistogram.Hist1D
+        hist : pyhistogram.Hist
            Parent histogram to which this bin belongs
         gidx : int
            Global bin index
