@@ -53,10 +53,10 @@ class Hist1D(object):
         except IndexError:
             pass
 
-        self.Bin_container = Bin_container(self.Xaxis.nbins)
+        self.Bin_container = Bin_container(*[a.nbins for a in self.axes])
 
-        if len(self.axes) > 1:
-            raise NotImplemented('Only 1 dimensions are currently supported')
+        # if len(self.axes) > 1:
+        #     raise NotImplemented('Only 1 dimensions are currently supported')
 
         # no fancy stuff, increment this if overflow happens on any axes
         self.overflow = 0
@@ -118,7 +118,7 @@ class Hist1D(object):
            A class giving easy access to all the information of this bin.
         """
         n_total = self.Bin_container.nbins
-        # remeber, gidx starts at 1!
+        # remember, gidx starts at 1!
         for gidx in range(1, n_total+1):
             yield Bin_proxy(self, gidx)
 
