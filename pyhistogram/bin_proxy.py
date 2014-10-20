@@ -1,53 +1,108 @@
-"""The bin proxy is a convinient interface for getting additional information
-about each bin when iterating through several bins of the histogram.
-E.g.:
-for bin in h.bins():
-    print bin.center
-"""
-
-
 class Bin_proxy(object):
-    """
-    The bin proxy is created for each bin yielded
-    by h.bins()
-    """
+    """The bin proxy is a convenient interface for getting additional information about each bin when iterating through several bins of the histogram. 
 
+    The bin proxy is created for each bin yielded by h.bins(), e.g.:::
+
+      >>> for bin in h.bins():
+      ...     print bin.center
+    """
     def __init__(self, hist, gidx):
+        """Initialization of a new Bin_proxy.
+
+        Parameters
+        ----------
+        hist : pyhistogram.Hist
+           Parent histogram to which this bin belongs
+        gidx : int
+           Global bin index
+        """
         self.hist = hist
         self.gidx = gidx
         self.ijk = self.axial_indices
 
     @property
     def axial_indices(self):
-        """return the axial indices for this bin"""
+        """Returns the axial indices (i, j, k) for this bin.
+
+        This function always returns three indices regardless of the histograms dimensionality.
+
+        Return
+        ------
+        tuple :
+           Tuple of the three axial indices (i, j, k)
+        """
         return self.hist.Bin_container.get_ijk_from_global_bin(self.gidx)
 
     @property
     def x(self):
+        """Provides an entry point for retrieving x-axis specific information from this bin.
+
+        Return
+        ------
+        pyhistogram.bin_proxy.bi
+        """
         return self.axis_bininfo(0, self.ijk[0])
 
     @property
     def y(self):
+        """Provides an entry point for retrieving y-axis specific information from this bin.
+
+        Return
+        ------
+        pyhistogram.bin_proxy.bi
+        """
         return self.axis_bininfo(1, self.ijk[1])
 
     @property
     def z(self):
+        """Provides an entry point for retrieving z-axis specific information from this bin.
+
+        Return
+        ------
+        pyhistogram.bin_proxy.bi
+        """
         return self.axis_bininfo(2, self.ijk[2])
 
     @property
     def value(self):
+        """Return the value of this bin.
+
+        Return
+        ------
+        float
+        """
         return self.hist.Bin_container.get_bin_content(self.gidx)
 
     @value.setter
     def value(self, v):
-        return self.hist.Bin_container.set_bin_content(self.gidx, v)
+        """Replace the bin's value with the given value v.
+
+        Parameters
+        ----------
+        v : int or float
+           New value of this bin
+        """
+        self.hist.Bin_container.set_bin_content(self.gidx, v)
 
     @property
     def error(self):
+        """Return the error of this bin.
+
+        Return
+        ------
+        float
+        """
         return self.hist.Bin_container.get_bin_error(self.idx)
 
     @error.setter
     def error(self, e):
+        """Replace the bin's error with the given value v.
+
+        Parameters
+        ----------
+        v : int or float
+           New value of this bin
+        """
         return self.hist.Bin_container.set_bin_error(self.idx)
 
     @property
@@ -87,15 +142,39 @@ class Bin_proxy(object):
 
     def axis_bininfo(self, ax, ax_idx):
         if self.hist.axes[ax].dtype != 'regex':
-            class bi:
+            class Bin_info:
+                """Interface to axis specific information for a given bin.
+
+                Attributes
+                ----------
+                axis : pyhistogram.Axis
+                   Axis from which this Bin_info class was created
+                low : float or datetime
+                   Lower edge of this bin.
+                center : float or datetime
+                   Center of this bin.
+                high : float or datetime
+                   Upper edge of this bin.
+                width : float or datetime.timedelta
+                   Width of this bin.
+                """
                 axis = self.hist.axes[ax]
                 low = axis.get_bin_low_edge(ax_idx)
                 center = axis.get_bin_center(ax_idx)
                 high = axis.get_bin_up_edge(ax_idx)
                 width = axis.get_bin_width(ax_idx)
-            return bi
+            return Bin_info
         else:
-            class bi:
+            class Bin_info:
+                """Interface to axis specific information for a given bin.
+
+                Attributes
+                ----------
+                axis : pyhistogram.Axis
+                   Axis from which this Bin_info class was created
+                regex : str
+                   Regex pattern of this bin
+                """
                 axis = self.hist.axes[ax]
                 regex = axis.get_bin_regex(ax_idx).pattern
-            return bi
+            return Bin_info

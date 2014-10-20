@@ -51,3 +51,9 @@ class Test_bin_container(unittest.TestCase):
         ijk = (3, 2, 2)
         gidx = bc.get_global_bin_from_ijk(*ijk)
         self.assertEqual(bc.get_ijk_from_global_bin(gidx), ijk)
+
+        bc = Bin_container(2, 4, 4)
+        ijk = (2, 4, 1)
+        # gidx = bc.get_global_bin_from_ijk(*ijk)
+        gidx = 8
+        self.assertEqual(bc.get_ijk_from_global_bin(gidx), ijk)
