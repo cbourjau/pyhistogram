@@ -81,9 +81,10 @@ class Bin_container(object):
         z_level, rem = divmod(gidx, self.I*self.J)
         # check if the last level is exactly full or if the next level is started:
         k = z_level + 1 if rem > 0 else z_level
-
+        # if the x-y plane is completely filled (rem==0):
+        # the x and the y indices must be maximal
         y_level, rem = divmod(rem, self.I)
-        j = y_level + 1 if rem > 0 else y_level
+        j = y_level + 1 if rem > 0 else self.J
 
         i = rem if rem > 0 else self.I
         return i, j, k
