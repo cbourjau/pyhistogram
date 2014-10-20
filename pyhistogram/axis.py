@@ -151,6 +151,18 @@ class Axis(object):
             [l + (u - l) / 2.0 for l, u in zip(self.edges, self.edges[1:])],
             self.dtype)
 
+    def get_bin_regexes(self):
+        """Returns the regexes (not the patterns) of the bins along this axis.
+
+        This function is only available for axes of the type 'regex'.
+
+        Return
+        ------
+        array_like
+        """
+        # exclude the empty string as the last edge
+        return self.edges[:(self.nbins)]
+
     def get_bin_regex(self, i):
         """Return the regexes for each bin along this axis.
 
