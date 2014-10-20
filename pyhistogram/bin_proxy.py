@@ -177,4 +177,4 @@ class Bin_proxy(object):
                 """
                 axis = self.hist.axes[ax]
                 regex = axis.get_bin_regex(ax_idx).pattern
-            return Bin_info_regex
+            return Bin_info
