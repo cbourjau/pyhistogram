@@ -164,7 +164,7 @@ class Axis(object):
         return self.edges[:(self.nbins)]
 
     def get_bin_regex(self, i):
-        """Return the regexes for each bin along this axis.
+        """Return the regex for the respective bin on this axis.
 
         This function is not available if the axis is of type datetime, numerical
 
