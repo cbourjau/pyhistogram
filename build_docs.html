@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Python Module Index &mdash; pyhistogram 0.2 documentation</title>
+    <title>Building the documentation &mdash; pyhistogram 0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,9 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="pyhistogram 0.2 documentation" href="index.html" />
- 
-
-
+    <link rel="prev" title="pyhistogram package" href="pyhistogram.html" /> 
   </head>
   <body>
     <div class="related">
@@ -36,8 +34,11 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="#" title="Python Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pyhistogram.html" title="pyhistogram package"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">pyhistogram 0.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -47,54 +48,20 @@
         <div class="bodywrapper">
           <div class="body">
             
-
-   <h1>Python Module Index</h1>
-
-   <div class="modindex-jumpbox">
-   <a href="#cap-p"><strong>p</strong></a>
-   </div>
-
-   <table class="indextable modindextable" cellspacing="0" cellpadding="2">
-     <tr class="pcap"><td></td><td>&nbsp;</td><td></td></tr>
-     <tr class="cap" id="cap-p"><td></td><td>
-       <strong>p</strong></td><td></td></tr>
-     <tr>
-       <td><img src="_static/minus.png" class="toggler"
-              id="toggle-1" style="display: none" alt="-" /></td>
-       <td>
-       <a href="pyhistogram.html#module-pyhistogram"><tt class="xref">pyhistogram</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="pyhistogram.html#module-pyhistogram.axis"><tt class="xref">pyhistogram.axis</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="pyhistogram.html#module-pyhistogram.bin_container"><tt class="xref">pyhistogram.bin_container</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="pyhistogram.html#module-pyhistogram.bin_proxy"><tt class="xref">pyhistogram.bin_proxy</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="pyhistogram.html#module-pyhistogram.flow_exceptions"><tt class="xref">pyhistogram.flow_exceptions</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="pyhistogram.html#module-pyhistogram.hist"><tt class="xref">pyhistogram.hist</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="pyhistogram.html#module-pyhistogram.utils"><tt class="xref">pyhistogram.utils</tt></a></td><td>
-       <em></em></td></tr>
-   </table>
+  <div class="section" id="building-the-documentation">
+<h1>Building the documentation<a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Building the documentation requires sphinx together with napoleon to be installed.</p>
+<p>If new modules or methods were added one needs to rebuild the source files with
+from the docs directory by running</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sphinx-apidoc -f -o source/ ../pyhistogram/ ../pyhistogram/tests
+</pre></div>
+</div>
+<p>Than, the html files can be recreated by running</p>
+<div class="highlight-python"><div class="highlight"><pre>make html
+</pre></div>
+</div>
+<p>in the docs directory again. The html file will be created in ../../pyhistogram-docs/html from where it can easily be pushed to the github-pages.</p>
+</div>
 
 
           </div>
@@ -102,6 +69,14 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pyhistogram.html"
+                        title="previous chapter">pyhistogram package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/build_docs.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
@@ -126,8 +101,11 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="#" title="Python Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pyhistogram.html" title="pyhistogram package"
+             >previous</a> |</li>
         <li><a href="index.html">pyhistogram 0.2 documentation</a> &raquo;</li> 
       </ul>
     </div>

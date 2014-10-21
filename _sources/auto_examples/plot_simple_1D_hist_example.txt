@@ -1,0 +1,27 @@
+
+
+.. _example_plot_simple_1D_hist_example.py:
+
+
+===============================================
+Demonstration for filling a histogram in a loop
+===============================================
+
+A simple, one dimensional histogram is filled in a loop with random
+values. The result is than plotted with the build in plot command.
+
+
+
+.. image:: images/plot_simple_1D_hist_example_1.png
+   :align: center
+
+
+
+
+**Python source code:** :download:`plot_simple_1D_hist_example.py <plot_simple_1D_hist_example.py>`
+
+.. literalinclude:: plot_simple_1D_hist_example.py
+    :lines: 9-
+
+**Total running time of the example:**  0.09 seconds
+    

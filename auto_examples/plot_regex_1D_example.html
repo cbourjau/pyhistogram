@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Fill a histogram with all the words from hamlet &mdash; pyhistogram 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyhistogram 0.2 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="Demonstration for filling a histogram in a loop" href="plot_simple_1D_hist_example.html" />
+    <link rel="prev" title="Filling a datetime histogram in a loop" href="plot_datetime_1D.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plot_simple_1D_hist_example.html" title="Demonstration for filling a histogram in a loop"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="plot_datetime_1D.html" title="Filling a datetime histogram in a loop"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">pyhistogram 0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="fill-a-histogram-with-all-the-words-from-hamlet">
+<span id="example-plot-regex-1d-example-py"></span><h1>Fill a histogram with all the words from hamlet<a class="headerlink" href="#fill-a-histogram-with-all-the-words-from-hamlet" title="Permalink to this headline">¶</a></h1>
+<p>The following demonstrates how a histogram with regex-defined bins
+may be used. Clearly, it is better to &#8220;be&#8221; than &#8220;not&#8221;. The Hamlet text
+is included in this package for convenient testing. You are welcome.</p>
+<img alt="../_images/plot_regex_1D_example_1.png" class="align-center" src="../_images/plot_regex_1D_example_1.png" />
+<p><strong>Python source code:</strong> <a class="reference download internal" href="../_downloads/plot_regex_1D_example.py"><tt class="xref download docutils literal"><span class="pre">plot_regex_1D_example.py</span></tt></a></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyhistogram</span> <span class="kn">import</span> <span class="n">Hist</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">pyhistogram.testdata</span> <span class="kn">import</span> <span class="n">get_file</span>  <span class="c"># Hamlet testdata</span>
+
+<span class="n">hist</span> <span class="o">=</span> <span class="n">Hist</span><span class="p">([</span><span class="s">&#39;To&#39;</span><span class="p">,</span> <span class="s">&#39;be&#39;</span><span class="p">,</span> <span class="s">&#39;or&#39;</span><span class="p">,</span> <span class="s">&#39;not&#39;</span><span class="p">])</span>
+
+<span class="c"># Split the words up into individual words</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">&#39;\w+&#39;</span><span class="p">,</span> <span class="n">get_file</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+<span class="n">hist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the example:</strong>  0.35 seconds</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="plot_datetime_1D.html"
+                        title="previous chapter">Filling a datetime histogram in a loop</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="plot_simple_1D_hist_example.html"
+                        title="next chapter">Demonstration for filling a histogram in a loop</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/auto_examples/plot_regex_1D_example.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plot_simple_1D_hist_example.html" title="Demonstration for filling a histogram in a loop"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="plot_datetime_1D.html" title="Filling a datetime histogram in a loop"
+             >previous</a> |</li>
+        <li><a href="../index.html">pyhistogram 0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Christian Bourjau.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

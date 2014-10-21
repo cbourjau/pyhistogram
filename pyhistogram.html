@@ -1,0 +1,802 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyhistogram package &mdash; pyhistogram 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyhistogram 0.2 documentation" href="index.html" />
+    <link rel="up" title="pyhistogram" href="modules.html" />
+    <link rel="next" title="Building the documentation" href="build_docs.html" />
+    <link rel="prev" title="pyhistogram" href="modules.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="build_docs.html" title="Building the documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="pyhistogram"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pyhistogram 0.2 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">pyhistogram</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pyhistogram-package">
+<h1>pyhistogram package<a class="headerlink" href="#pyhistogram-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pyhistogram.axis">
+<span id="pyhistogram-axis-module"></span><h2>pyhistogram.axis module<a class="headerlink" href="#module-pyhistogram.axis" title="Permalink to this headline">¶</a></h2>
+<p>The Axis class functions allows quick access to information about the histograms
+binnings etc.</p>
+<dl class="class">
+<dt id="pyhistogram.axis.Axis">
+<em class="property">class </em><tt class="descclassname">pyhistogram.axis.</tt><tt class="descname">Axis</tt><big>(</big><em>hist</em>, <em>*args</em><big>)</big><a class="headerlink" href="#pyhistogram.axis.Axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>The Axis is the container for all the functions specific to one
+particular dimension of the histogram.</p>
+<p>E.g. the type of the edge values, number of bins etc.</p>
+<p>Initialization of a new axis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hist</strong> (<em>Hist</em>) &#8211; The histogram to which this axis belongs</li>
+<li><strong>args</strong> (<em>array_like</em>) &#8211; Either:
+* Only element of type list it gives the bin edges
+* Three elements: nbins (int), lowest bound, highest bound</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>Initialization with bin edges</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">Axis</span><span class="p">(</span><span class="n">hist</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">Axis</span><span class="p">(</span><span class="n">hist</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;My&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;is&#39;</span><span class="p">,</span> <span class="s">&#39;Bond&#39;</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>Initialization with number of bins (10), lowest (0) and highest bound (1)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">Axis</span><span class="p">(</span><span class="n">hist</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="pyhistogram.axis.Axis.get_bin_center">
+<tt class="descname">get_bin_center</tt><big>(</big><em>i</em><big>)</big><a class="headerlink" href="#pyhistogram.axis.Axis.get_bin_center" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the center of the given bin, if appropriate converted
+to the axis&#8217;s type.</p>
+<p>This function is not available if the axis is of type &#8216;regex&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>i</strong> (<em>int</em>) &#8211; Axis bin number</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float or datetime</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.axis.Axis.get_bin_centers">
+<tt class="descname">get_bin_centers</tt><big>(</big><big>)</big><a class="headerlink" href="#pyhistogram.axis.Axis.get_bin_centers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the centers of the bins along this axis.</p>
+<p>This function is not available if the axis is of type &#8216;regex&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.axis.Axis.get_bin_edges">
+<tt class="descname">get_bin_edges</tt><big>(</big><em>convert=True</em><big>)</big><a class="headerlink" href="#pyhistogram.axis.Axis.get_bin_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the edges of the bins along this axis.</p>
+<p>This function is not available if the axis is of type &#8216;regex&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>convert</strong> (<em>bool</em>) &#8211; If true, the returned value will be converted to the appropriate type of the axis (e.g. datetime)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The length of this array is nbins + 1</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.axis.Axis.get_bin_low_edge">
+<tt class="descname">get_bin_low_edge</tt><big>(</big><em>i</em>, <em>convert=True</em><big>)</big><a class="headerlink" href="#pyhistogram.axis.Axis.get_bin_low_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns only the lower bin edges of the bins along this axis.</p>
+<p>This function is not available if the axis is of type &#8216;regex&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>convert</strong> (<em>bool</em>) &#8211; If true, the returned value will be converted to the appropriate type of the axis (e.g. datetime)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.axis.Axis.get_bin_regex">
+<tt class="descname">get_bin_regex</tt><big>(</big><em>i</em><big>)</big><a class="headerlink" href="#pyhistogram.axis.Axis.get_bin_regex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the regex for the respective bin on this axis.</p>
+<p>This function is not available if the axis is of type datetime, numerical</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>i</strong> (<em>int</em>) &#8211; Axis bin number</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.axis.Axis.get_bin_regexes">
+<tt class="descname">get_bin_regexes</tt><big>(</big><big>)</big><a class="headerlink" href="#pyhistogram.axis.Axis.get_bin_regexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the regexes (not the patterns) of the bins along this axis.</p>
+<p>This function is only available for axes of the type &#8216;regex&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.axis.Axis.get_bin_up_edge">
+<tt class="descname">get_bin_up_edge</tt><big>(</big><em>i</em>, <em>convert=True</em><big>)</big><a class="headerlink" href="#pyhistogram.axis.Axis.get_bin_up_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns only the upper bin edge of for a given axis-bin number.</p>
+<p>This function is not available if the axis is of type &#8216;regex&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>convert</strong> (<em>bool</em>) &#8211; If true, the returned value will be converted to the appropriate type of the axis (e.g. datetime)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.axis.Axis.get_bin_width">
+<tt class="descname">get_bin_width</tt><big>(</big><em>i</em><big>)</big><a class="headerlink" href="#pyhistogram.axis.Axis.get_bin_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the width of the given bin in the appropriate type.</p>
+<p>This function is not available if the axis is of type &#8216;regex&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>i</strong> (<em>int</em>) &#8211; Axis bin number</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float or datetime</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyhistogram.axis.Axis.nbins">
+<tt class="descname">nbins</tt><a class="headerlink" href="#pyhistogram.axis.Axis.nbins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of bins along this axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyhistogram.bin_container">
+<span id="pyhistogram-bin-container-module"></span><h2>pyhistogram.bin_container module<a class="headerlink" href="#module-pyhistogram.bin_container" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyhistogram.bin_container.Bin_container">
+<em class="property">class </em><tt class="descclassname">pyhistogram.bin_container.</tt><tt class="descname">Bin_container</tt><big>(</big><em>nxbins</em>, <em>nybins=1</em>, <em>nzbins=1</em><big>)</big><a class="headerlink" href="#pyhistogram.bin_container.Bin_container" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>This class provides access to the histogram&#8217;s bins without creating the need for the user to know anything about the internal storage mechanisms. Bins are organized in one long array with a unique mapping from the axis bin numbers i, j, k to the global bin number b. It is important to remember that each of these indices starts at 1 not 0.</p>
+<p>Having I bins along the x-axis, J bins along the y-axis and K bins along the z-axis, the mapping from the xyz bin numbers (i, j, k) to the global bin number b is given by::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">J</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">I</span> <span class="o">+</span> <span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">I</span> <span class="o">+</span> <span class="n">i</span>
+</pre></div>
+</div>
+<p>Thus, in case of a 2D histogram (k=K=1; j&gt;1) this reduces to::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">I</span> <span class="o">+</span> <span class="n">i</span>
+</pre></div>
+</div>
+<p>and for a 1D histogram (k=K=1=j=J=1)::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b</span> <span class="o">=</span> <span class="n">i</span>
+</pre></div>
+</div>
+<p>The bin container class does not deal with the finding of bins in user defined units. It exclusively deals with bin numbers and leaves the user defined bin sizes and units to the axis class.</p>
+<p>Initialization of the Bin_container.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nybins, nzbins</strong> (<em>nxbins,</em>) &#8211; Number of bins along each axis. Must be greater than 1</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyhistogram.bin_container.Bin_container.fill_bin">
+<tt class="descname">fill_bin</tt><big>(</big><em>gidx</em>, <em>weight=1</em><big>)</big><a class="headerlink" href="#pyhistogram.bin_container.Bin_container.fill_bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increment the value of the given bin by the given weight</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gidx</strong> (<em>int</em>) &#8211; Global bin number</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.bin_container.Bin_container.get_bin_content">
+<tt class="descname">get_bin_content</tt><big>(</big><em>gidx</em><big>)</big><a class="headerlink" href="#pyhistogram.bin_container.Bin_container.get_bin_content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the content of a given bin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gidx</strong> (<em>int</em>) &#8211; Global bin number</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.bin_container.Bin_container.get_bin_error">
+<tt class="descname">get_bin_error</tt><big>(</big><em>gidx</em><big>)</big><a class="headerlink" href="#pyhistogram.bin_container.Bin_container.get_bin_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the error of a given bin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gidx</strong> (<em>int</em>) &#8211; Global bin number</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.bin_container.Bin_container.get_global_bin_from_ijk">
+<tt class="descname">get_global_bin_from_ijk</tt><big>(</big><em>i</em>, <em>j=1</em>, <em>k=1</em><big>)</big><a class="headerlink" href="#pyhistogram.bin_container.Bin_container.get_global_bin_from_ijk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the global bin number given the axis bin numbers.</p>
+<p>The axis bin numbers are denoted as i, j, k for the x, y and z axis respectively. They are element of [1, N] where N is I, J, or K respectively.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>i</strong> (<em>int</em>) &#8211; Local bin number of the x axis</li>
+<li><strong>j,k</strong> (<em>int, optional</em>) &#8211; Local bin numbers of the y and z axis. (Default 1)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.bin_container.Bin_container.get_ijk_from_global_bin">
+<tt class="descname">get_ijk_from_global_bin</tt><big>(</big><em>gidx</em><big>)</big><a class="headerlink" href="#pyhistogram.bin_container.Bin_container.get_ijk_from_global_bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the local bin numbers for each axis given the global bin number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gidx</strong> (<em>int</em>) &#8211; Global bin number</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The three axis bin numbers (i, j, k)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyhistogram.bin_container.Bin_container.nbins">
+<tt class="descname">nbins</tt><a class="headerlink" href="#pyhistogram.bin_container.Bin_container.nbins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the total number of bins of in this histogram</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.bin_container.Bin_container.set_bin_content">
+<tt class="descname">set_bin_content</tt><big>(</big><em>gidx</em>, <em>v</em><big>)</big><a class="headerlink" href="#pyhistogram.bin_container.Bin_container.set_bin_content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces the content of a bin with the given value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>gidx</strong> (<em>int</em>) &#8211; Global bin number</li>
+<li><strong>v</strong> (<em>float</em>) &#8211; New content of this bin</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.bin_container.Bin_container.set_bin_error">
+<tt class="descname">set_bin_error</tt><big>(</big><em>gidx</em>, <em>e</em><big>)</big><a class="headerlink" href="#pyhistogram.bin_container.Bin_container.set_bin_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces the error of a bin with the given value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>gidx</strong> (<em>int</em>) &#8211; Global bin number</li>
+<li><strong>e</strong> (<em>float</em>) &#8211; New error of this bin</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyhistogram.bin_proxy">
+<span id="pyhistogram-bin-proxy-module"></span><h2>pyhistogram.bin_proxy module<a class="headerlink" href="#module-pyhistogram.bin_proxy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyhistogram.bin_proxy.Bin_proxy">
+<em class="property">class </em><tt class="descclassname">pyhistogram.bin_proxy.</tt><tt class="descname">Bin_proxy</tt><big>(</big><em>hist</em>, <em>gidx</em><big>)</big><a class="headerlink" href="#pyhistogram.bin_proxy.Bin_proxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>The bin proxy is a convenient interface for getting additional information about each bin when iterating through several bins of the histogram.</p>
+<p>The bin proxy is created for each bin yielded by h.bins(), e.g.::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="nb">bin</span> <span class="ow">in</span> <span class="n">h</span><span class="o">.</span><span class="n">bins</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="nb">bin</span><span class="o">.</span><span class="n">center</span>
+</pre></div>
+</div>
+<p>Initialization of a new Bin_proxy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hist</strong> (<em>pyhistogram.Hist</em>) &#8211; Parent histogram to which this bin belongs</li>
+<li><strong>gidx</strong> (<em>int</em>) &#8211; Global bin index</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="pyhistogram.bin_proxy.Bin_proxy.axial_indices">
+<tt class="descname">axial_indices</tt><a class="headerlink" href="#pyhistogram.bin_proxy.Bin_proxy.axial_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the axial indices (i, j, k) for this bin.</p>
+<p>This function always returns three indices regardless of the histograms dimensionality.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple of the three axial indices (i, j, k)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.bin_proxy.Bin_proxy.axis_bininfo">
+<tt class="descname">axis_bininfo</tt><big>(</big><em>ax</em>, <em>ax_idx</em><big>)</big><a class="headerlink" href="#pyhistogram.bin_proxy.Bin_proxy.axis_bininfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pyhistogram.bin_proxy.Bin_proxy.effective_entries">
+<tt class="descname">effective_entries</tt><a class="headerlink" href="#pyhistogram.bin_proxy.Bin_proxy.effective_entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of effective entries in this bin.
+The number of unweighted entries this bin would need to
+contain in order to have the same statistical power as this
+bin with possibly weighted entries, estimated by:</p>
+<blockquote>
+<div>(sum of weights) ** 2 / (sum of squares of weights)</div></blockquote>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyhistogram.bin_proxy.Bin_proxy.error">
+<tt class="descname">error</tt><a class="headerlink" href="#pyhistogram.bin_proxy.Bin_proxy.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the error of this bin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyhistogram.bin_proxy.Bin_proxy.value">
+<tt class="descname">value</tt><a class="headerlink" href="#pyhistogram.bin_proxy.Bin_proxy.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of this bin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyhistogram.bin_proxy.Bin_proxy.x">
+<tt class="descname">x</tt><a class="headerlink" href="#pyhistogram.bin_proxy.Bin_proxy.x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides an entry point for retrieving x-axis specific information from this bin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">pyhistogram.bin_proxy.bi</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyhistogram.bin_proxy.Bin_proxy.y">
+<tt class="descname">y</tt><a class="headerlink" href="#pyhistogram.bin_proxy.Bin_proxy.y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides an entry point for retrieving y-axis specific information from this bin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">pyhistogram.bin_proxy.bi</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyhistogram.bin_proxy.Bin_proxy.z">
+<tt class="descname">z</tt><a class="headerlink" href="#pyhistogram.bin_proxy.Bin_proxy.z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides an entry point for retrieving z-axis specific information from this bin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">pyhistogram.bin_proxy.bi</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyhistogram.flow_exceptions">
+<span id="pyhistogram-flow-exceptions-module"></span><h2>pyhistogram.flow_exceptions module<a class="headerlink" href="#module-pyhistogram.flow_exceptions" title="Permalink to this headline">¶</a></h2>
+<p>Defining exceptions to be raised if a look for a bin yielded an over/under flow</p>
+<dl class="exception">
+<dt id="pyhistogram.flow_exceptions.OverflowException">
+<em class="property">exception </em><tt class="descclassname">pyhistogram.flow_exceptions.</tt><tt class="descname">OverflowException</tt><a class="headerlink" href="#pyhistogram.flow_exceptions.OverflowException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="pyhistogram.flow_exceptions.UnderflowException">
+<em class="property">exception </em><tt class="descclassname">pyhistogram.flow_exceptions.</tt><tt class="descname">UnderflowException</tt><a class="headerlink" href="#pyhistogram.flow_exceptions.UnderflowException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyhistogram.hist">
+<span id="pyhistogram-hist-module"></span><h2>pyhistogram.hist module<a class="headerlink" href="#module-pyhistogram.hist" title="Permalink to this headline">¶</a></h2>
+<p>The Hist classes are the entry point for the user for creating and using the histogram</p>
+<dl class="class">
+<dt id="pyhistogram.hist.Hist">
+<em class="property">class </em><tt class="descclassname">pyhistogram.hist.</tt><tt class="descname">Hist</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#pyhistogram.hist.Hist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Initialization of a one dimensional histogram</p>
+<dl class="docutils">
+<dt>A histogram can either be specified in two ways:</dt>
+<dd><ol class="first last arabic simple">
+<li>By the number of bins, lower and upper bound. The equidistant
+bin edges will be calculated automatically.</li>
+<li>By specifying the bin edges explicitly.</li>
+</ol>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>width</strong> (<em>Variable</em>) &#8211; </li>
+<li><strong>args</strong> (<em>array_like</em>) &#8211; The first element must be an int (number of bins), the second
+and third may be either int or float or datetime</li>
+<li><strong>width</strong> &#8211; </li>
+<li><strong>args</strong> &#8211; Array like object of length one. The first and only element is
+of type list or tuple with elements of type int or float or
+datetime</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyhistogram.hist.Hist.bins">
+<tt class="descname">bins</tt><big>(</big><big>)</big><a class="headerlink" href="#pyhistogram.hist.Hist.bins" title="Permalink to this definition">¶</a></dt>
+<dd><p>A iterator for all the bins in the histogram.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A class giving easy access to all the information of this bin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Bin_proxy</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.hist.Hist.fill">
+<tt class="descname">fill</tt><big>(</big><em>x</em>, <em>y=None</em>, <em>z=None</em>, <em>weight=1</em><big>)</big><a class="headerlink" href="#pyhistogram.hist.Hist.fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for adding content to the histogram.</p>
+<p>The bin containing the given x coordinate will be incremented with
+the value given as weight.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>y, z</strong> (<em>x,</em>) &#8211; The given type has to be compatible to the type used when
+initializing the histogram. y and z only have to be
+specified if the histogram is of
+corresponding dimensionality.</li>
+<li><strong>weight</strong> (<em>int or float</em>) &#8211; value by which the content of the bin containing the given
+coordinates is increased.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">Hist</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.hist.Hist.get_overflow">
+<tt class="descname">get_overflow</tt><big>(</big><big>)</big><a class="headerlink" href="#pyhistogram.hist.Hist.get_overflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return overflow of the entire histogram.</p>
+<p>No differentiation between individual axes nor under and overflow
+is implemented, yet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number of times the histogram was filled with coordinates
+not matching any bins</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.hist.Hist.plot">
+<tt class="descname">plot</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#pyhistogram.hist.Hist.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the current histogram.</p>
+<p>This requires matplotlib to be installed. All the given keywords
+are passed to the bar() function of matplotlib.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kwargs</strong> (<em>dict</em>) &#8211; are passed on to the bar() function of matplotlib.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">This is the return value of the bar() function</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">matplotlib.patches.Rectangle</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pyhistogram.hist.Hist1D">
+<tt class="descclassname">pyhistogram.hist.</tt><tt class="descname">Hist1D</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyhistogram.hist.Hist1D" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyhistogram.utils">
+<span id="pyhistogram-utils-module"></span><h2>pyhistogram.utils module<a class="headerlink" href="#module-pyhistogram.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyhistogram.utils.UTC">
+<em class="property">class </em><tt class="descclassname">pyhistogram.utils.</tt><tt class="descname">UTC</tt><a class="headerlink" href="#pyhistogram.utils.UTC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">datetime.tzinfo</span></tt></p>
+<p>UTC</p>
+<dl class="method">
+<dt id="pyhistogram.utils.UTC.dst">
+<tt class="descname">dst</tt><big>(</big><em>dt</em><big>)</big><a class="headerlink" href="#pyhistogram.utils.UTC.dst" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.utils.UTC.tzname">
+<tt class="descname">tzname</tt><big>(</big><em>dt</em><big>)</big><a class="headerlink" href="#pyhistogram.utils.UTC.tzname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyhistogram.utils.UTC.utcoffset">
+<tt class="descname">utcoffset</tt><big>(</big><em>dt</em><big>)</big><a class="headerlink" href="#pyhistogram.utils.UTC.utcoffset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pyhistogram.utils.convert_to_dtype">
+<tt class="descclassname">pyhistogram.utils.</tt><tt class="descname">convert_to_dtype</tt><big>(</big><em>v</em>, <em>dtype</em><big>)</big><a class="headerlink" href="#pyhistogram.utils.convert_to_dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert v to a python datetime if dtype is &#8216;datetime&#8217;</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyhistogram">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pyhistogram" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyhistogram package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-pyhistogram.axis">pyhistogram.axis module</a></li>
+<li><a class="reference internal" href="#module-pyhistogram.bin_container">pyhistogram.bin_container module</a></li>
+<li><a class="reference internal" href="#module-pyhistogram.bin_proxy">pyhistogram.bin_proxy module</a></li>
+<li><a class="reference internal" href="#module-pyhistogram.flow_exceptions">pyhistogram.flow_exceptions module</a></li>
+<li><a class="reference internal" href="#module-pyhistogram.hist">pyhistogram.hist module</a></li>
+<li><a class="reference internal" href="#module-pyhistogram.utils">pyhistogram.utils module</a></li>
+<li><a class="reference internal" href="#module-pyhistogram">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="previous chapter">pyhistogram</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="build_docs.html"
+                        title="next chapter">Building the documentation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/pyhistogram.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="build_docs.html" title="Building the documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="pyhistogram"
+             >previous</a> |</li>
+        <li><a href="index.html">pyhistogram 0.2 documentation</a> &raquo;</li>
+          <li><a href="modules.html" >pyhistogram</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Christian Bourjau.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

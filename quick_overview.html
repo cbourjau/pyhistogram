@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>What is pyhistogram &mdash; pyhistogram 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyhistogram 0.2 documentation" href="index.html" />
+    <link rel="next" title="Examples" href="auto_examples/index.html" />
+    <link rel="prev" title="Welcome to pyhistogram’s documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="auto_examples/index.html" title="Examples"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pyhistogram’s documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pyhistogram 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="what-is-pyhistogram">
+<h1>What is pyhistogram<a class="headerlink" href="#what-is-pyhistogram" title="Permalink to this headline">¶</a></h1>
+<p>pyhistogram is a pure python package for easy handling of histogram data. It offers much more functionality than pythons build-in &#8216;collections&#8217; feature.</p>
+<p>pyhistogram interface is heavily inspired by the excellent rootpy package which, however, depends on the gigantic particle physics ROOT framework - an dependency hardly justifiable for small projects. At the moment pyhistogram has no dependencies at all. Matplotlib is optional if one wants to use the built in plotting features. Than also means that this packages performance is nowhere near to that of the rootpy/ROOT solution, but should be sufficient for most use cases. In any case, it is quite possible that numpy might be added as an dependency in the future to use some of its features and to give this package a performance boost.</p>
+<p>Pyhistogram supports histograms of one, two or three dimensions and each axis can be either defined by datetimes, numerical values or even regexes! How cool it that?</p>
+</div>
+<div class="section" id="taking-it-for-a-spin">
+<h1>Taking it for a spin:<a class="headerlink" href="#taking-it-for-a-spin" title="Permalink to this headline">¶</a></h1>
+<p>The following shows some, but by far not all features and focuses on the one dimensional histogram to keep it simple. A proper documentation is on the todo list but for now I can recommend tacking a look at the unittests in the /tests folder over at github.</p>
+<div class="section" id="installing-pyhistogram">
+<h2>Installing pyhistogram:<a class="headerlink" href="#installing-pyhistogram" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>$ pip install pyhistogram
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-one-dimensional-histograms">
+<h2>Creating one dimensional histograms:<a class="headerlink" href="#creating-one-dimensional-histograms" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyhistogram</span> <span class="kn">import</span> <span class="n">Hist</span>
+
+<span class="c"># 1D histogram with fixed-width bins</span>
+<span class="c"># 5 bins from -2 to 4</span>
+<span class="n">h1d</span> <span class="o">=</span> <span class="n">Hist</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="c"># variable-width bins by specifying the bin edges</span>
+<span class="n">h1d</span> <span class="o">=</span> <span class="n">Hist</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">5.2</span><span class="p">,</span> <span class="mf">35.</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="histograms-can-be-filled-in-loops">
+<h2>Histograms can be filled in loops:<a class="headerlink" href="#histograms-can-be-filled-in-loops" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">Hist</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">h</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="and-one-can-easily-iterate-through-all-the-bins">
+<h2>And one can easily iterate through all the bins:<a class="headerlink" href="#and-one-can-easily-iterate-through-all-the-bins" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">Hist</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">b</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">h</span><span class="o">.</span><span class="n">bins</span><span class="p">()]</span>
+<span class="go">[1, 0, 0, 0]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="a-weight-can-be-associated-to-each-value-in-a-2-tuple">
+<h2>A weight can be associated to each value in a 2-tuple:<a class="headerlink" href="#a-weight-can-be-associated-to-each-value-in-a-2-tuple" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">Hist</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">b</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">h</span><span class="o">.</span><span class="n">bins</span><span class="p">()]</span>
+<span class="go">[0.5, 0, 0, 0]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="datetime-support-is-also-no-brainer">
+<h2>datetime support is also no-brainer:<a class="headerlink" href="#datetime-support-is-also-no-brainer" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetim</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">Hist</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2014</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2014</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">h</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2014</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="and-even-word-frequencies-based-on-regex-are-all-there-for-your-convenience">
+<h2>And even word frequencies (based on regex) are all there for your convenience:<a class="headerlink" href="#and-even-word-frequencies-based-on-regex-are-all-there-for-your-convenience" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">Hist</span><span class="p">([</span><span class="s">&#39;My&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;is&#39;</span><span class="p">,</span> <span class="s">&#39;Bond&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">hist</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;James&#39;</span><span class="p">,</span> <span class="s">&#39;Bond&#39;</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[(</span><span class="n">b</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">regex</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">hist</span><span class="o">.</span><span class="n">bins</span><span class="p">()]</span>
+<span class="go">[(&#39;My&#39;, 0), (&#39;name&#39;, 0), (&#39;is&#39;, 0), (&#39;Bond&#39;, 1)]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="if-matplotlib-is-available-1d-histograms-can-also-be-plotted-conveniently">
+<h2>If matplotlib is available, 1D histograms can also be plotted conveniently:<a class="headerlink" href="#if-matplotlib-is-available-1d-histograms-can-also-be-plotted-conveniently" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyhistogram</span> <span class="kn">import</span> <span class="n">Hist</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="n">Hist</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sample</span><span class="p">:</span>
+ <span class="n">h</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+ <span class="n">h</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+ <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Running the included unit tests (for (pyhistogram) developers):</p>
+<div class="highlight-python"><div class="highlight"><pre>$ nosetests pyhistogram
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">What is pyhistogram</a></li>
+<li><a class="reference internal" href="#taking-it-for-a-spin">Taking it for a spin:</a><ul>
+<li><a class="reference internal" href="#installing-pyhistogram">Installing pyhistogram:</a></li>
+<li><a class="reference internal" href="#creating-one-dimensional-histograms">Creating one dimensional histograms:</a></li>
+<li><a class="reference internal" href="#histograms-can-be-filled-in-loops">Histograms can be filled in loops:</a></li>
+<li><a class="reference internal" href="#and-one-can-easily-iterate-through-all-the-bins">And one can easily iterate through all the bins:</a></li>
+<li><a class="reference internal" href="#a-weight-can-be-associated-to-each-value-in-a-2-tuple">A weight can be associated to each value in a 2-tuple:</a></li>
+<li><a class="reference internal" href="#datetime-support-is-also-no-brainer">datetime support is also no-brainer:</a></li>
+<li><a class="reference internal" href="#and-even-word-frequencies-based-on-regex-are-all-there-for-your-convenience">And even word frequencies (based on regex) are all there for your convenience:</a></li>
+<li><a class="reference internal" href="#if-matplotlib-is-available-1d-histograms-can-also-be-plotted-conveniently">If matplotlib is available, 1D histograms can also be plotted conveniently:</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to pyhistogram&#8217;s documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="auto_examples/index.html"
+                        title="next chapter">Examples</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/quick_overview.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="auto_examples/index.html" title="Examples"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pyhistogram’s documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">pyhistogram 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Christian Bourjau.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

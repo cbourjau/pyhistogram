@@ -1,0 +1,64 @@
+
+.. raw:: html
+
+
+    <style type="text/css">
+
+    div#sidebarbutton {
+        display: none;
+    }
+
+    .figure {
+        float: left;
+        margin: 10px;
+        width: auto;
+        height: 200px;
+        width: 180px;
+    }
+
+    .figure img {
+        display: inline;
+        }
+
+    .figure .caption {
+        width: 170px;
+        text-align: center !important;
+    }
+    </style>
+
+.. _examples-index:
+
+
+
+.. _examples:
+
+Examples
+--------
+
+Examples demonstrating some of the features of pyhistogram
+
+
+
+
+
+.. toctree::
+
+   ./plot_datetime_1D
+
+
+
+.. toctree::
+
+   ./plot_regex_1D_example
+
+
+
+.. toctree::
+
+   ./plot_simple_1D_hist_example
+
+
+.. raw:: html
+
+    <div style="clear: both"></div>
+    

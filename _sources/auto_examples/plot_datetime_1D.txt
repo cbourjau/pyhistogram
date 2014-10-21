@@ -1,0 +1,27 @@
+
+
+.. _example_plot_datetime_1D.py:
+
+
+===============================================
+Filling a datetime histogram in a loop
+===============================================
+
+A one dimensional datetime histogram is filled in a loop with random dates.
+The result is than plotted with the build in plot command.
+
+
+
+.. image:: images/plot_datetime_1D_1.png
+   :align: center
+
+
+
+
+**Python source code:** :download:`plot_datetime_1D.py <plot_datetime_1D.py>`
+
+.. literalinclude:: plot_datetime_1D.py
+    :lines: 9-
+
+**Total running time of the example:**  0.24 seconds
+    
