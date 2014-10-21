@@ -47,7 +47,8 @@ help:
 	@echo "  doctest    to run all doctests embedded in the documentation (if enabled)"
 
 clean:
-	rm -rf $(BUILDDIR)/*
+	# Pay attention to not delete the .git repository
+	rm -rf `find $(BUILDDIR)/ -not -regex ".*git.*" -not -regex ".*nojekyll.*" -not -regex "$(BUILDDIR)/" -not -regex "$(BUILDDIR)/html"`
 	rm -rf source/auto_examples/
 
 html:
