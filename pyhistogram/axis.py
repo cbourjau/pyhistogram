@@ -61,6 +61,10 @@ def _establish_dtype(v):
         raise ValueError('Inconsitancy in given types')
 
 
+def _strictly_increasing(L):
+    return all(x < y for x, y in zip(L, L[1:]))
+
+
 class Axis(object):
     """The Axis is the container for all the functions specific to one
     particular dimension of the histogram.
@@ -97,16 +101,16 @@ class Axis(object):
         if len(args) == 1:
             self.dtype = _establish_dtype(args[0])
             if self.dtype == 'datetime' or self.dtype == 'numerical':
-                self.edges = _convert_datetimes_to_unix_time(args[0])
+                self._edges = _convert_datetimes_to_unix_time(args[0])
                 # check if edges are sane
-                if len(self.edges) < 2:
+                if len(self._edges) < 2:
                     raise ValueError('Too few edges given')
-                if not _strictly_increasing(self.edges):
+                if not _strictly_increasing(self._edges):
                     raise ValueError('Bin edges not monotonically increasing')
             if self.dtype == 'regex':
-                self.edges = [re.compile(s, re.IGNORECASE) for s in args[0]]
+                self._edges = [re.compile(s, re.IGNORECASE) for s in args[0]]
                 # append an empty string to mimic the last (excluded) edge of the hist
-                self.edges.append('')
+                self._edges.append('')
 
         # fixed bin widths
         elif len(args) == 3:
@@ -116,7 +120,7 @@ class Axis(object):
                 lower = _convert_datetimes_to_unix_time(args[1])
                 upper = _convert_datetimes_to_unix_time(args[2])
                 width = float(upper - lower) / nbins
-                self.edges = [lower + n * width for n in range(nbins + 1)]
+                self._edges = [lower + n * width for n in range(nbins + 1)]
             if self.dtype == 'regex':
                 raise ValueError('Regex bins only support with list initialisation')
         else:
@@ -136,7 +140,7 @@ class Axis(object):
         ------
         int
         """
-        return len(self.edges) - 1
+        return len(self._edges) - 1
 
     def get_bin_centers(self):
         """Returns the centers of the bins along this axis.
@@ -148,7 +152,7 @@ class Axis(object):
         array_like
         """
         return convert_to_dtype(
-            [l + (u - l) / 2.0 for l, u in zip(self.edges, self.edges[1:])],
+            [l + (u - l) / 2.0 for l, u in zip(self._edges, self._edges[1:])],
             self.dtype)
 
     def get_bin_regexes(self):
@@ -161,7 +165,7 @@ class Axis(object):
         array_like
         """
         # exclude the empty string as the last edge
-        return self.edges[:(self.nbins)]
+        return self._edges[:(self.nbins)]
 
     def get_bin_regex(self, i):
         """Return the regex for the respective bin on this axis.
@@ -177,7 +181,7 @@ class Axis(object):
         ------
         array_like
         """
-        return self.edges[i-1]
+        return self._edges[i-1]
 
     def get_bin_edges(self, convert=True):
         """Returns the edges of the bins along this axis.
@@ -195,9 +199,9 @@ class Axis(object):
            The length of this array is nbins + 1
         """
         if convert:
-            return convert_to_dtype(self.edges, self.dtype)
+            return convert_to_dtype(self._edges, self.dtype)
         else:
-            return self.edges
+            return self._edges
 
     def get_bin_low_edge(self, i, convert=True):
         """Returns only the lower bin edges of the bins along this axis.
@@ -268,6 +272,15 @@ class Axis(object):
         high = self.get_bin_up_edge(i)
         return high - low
 
+    def get_type(self):
+        """Returns the type of the axis.
+
+        Return:
+        str :
+           {'numerical', 'datetime', 'regex'}
+        """
+        return self.dtype
+
     def _find_axis_bin_numerical(self, v):
         """ Find the bin of this axis containing v.
         This is not the global bin number of the histogram!
@@ -276,12 +289,12 @@ class Axis(object):
         # generator returning the first match for an index
         v = _convert_datetimes_to_unix_time(v)
         gen = (i for i, (l, u) in
-               enumerate(zip(self.edges, self.edges[1:])) if l <= v < u)
+               enumerate(zip(self._edges, self._edges[1:])) if l <= v < u)
         try:
             index = gen.next()
         except StopIteration:
             # underflow:
-            if v < self.edges[0]:
+            if v < self._edges[0]:
                 raise UnderflowException
             else:
                 raise OverflowException
@@ -292,13 +305,9 @@ class Axis(object):
         return: axis_binnummber or raises exception if no match is found"""
         # generator returns indices of matches
         # exclude the last bin edge (empty string)
-        gen = (i for i, rx in enumerate(self.edges[:-1]) if rx.match(s))
+        gen = (i for i, rx in enumerate(self._edges[:-1]) if rx.match(s))
         try:
             index = gen.next()
         except StopIteration:
             raise OverflowException
         return index + 1
-
-
-def _strictly_increasing(L):
-    return all(x < y for x, y in zip(L, L[1:]))
