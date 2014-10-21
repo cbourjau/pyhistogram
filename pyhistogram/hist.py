@@ -6,7 +6,9 @@ from pyhistogram.axis import Axis
 from pyhistogram.bin_container import Bin_container
 from pyhistogram.flow_exceptions import OverflowException, UnderflowException
 from pyhistogram.bin_proxy import Bin_proxy
+from pyhistogram.utils import isbasictype
 
+from copy import deepcopy
 
 class Hist(object):
     def __init__(self, *args):
@@ -121,6 +123,15 @@ class Hist(object):
         for gidx in range(1, n_total+1):
             yield Bin_proxy(self, gidx)
 
+    def get_dimensions(self):
+        """Returns the number of dimensions of this histogram.
+
+        Return
+        ------
+        int
+        """
+        return len(self.axes)
+
     def plot(self, **kwargs):
         """Plot the current histogram.
 
@@ -167,6 +178,130 @@ class Hist(object):
             ax.set_xticklabels(
                 names, rotation=45, rotation_mode="anchor", ha="right")
         return ret
+
+    def check_compatibility(self, other, precision=1E-7):
+        """
+        Test whether two histograms are considered compatible by the number of
+        dimensions, number of bins along each axis, and optionally the bin
+        edges.
+
+        Parameters
+        ----------
+        other : histogram
+           A rootpy histogram
+        precision : float, optional (default=1E-7)
+           The value below which differences between floats are treated as
+           nil when comparing bin edges.
+
+        Raises
+        ------
+        TypeError
+           If the histograms dimensions or axis types do not match.
+        ValueError
+           If the histogram sizes, number of bins along an axis or
+           the bin edges do not match.
+        """
+        if self.get_dimensions() != other.get_dimensions():
+            raise TypeError("histogram dimensionalities do not match")
+        for i, (ax1, ax2) in enumerate(zip(self.axes, other.axes)):
+            if ax1.nbins != ax2.nbins:
+                raise ValueError(
+                    "Numbers of bins along axis {0:d} do not match".format(i))
+            if ax1.get_type() != ax2.get_type():
+                raise TypeError(
+                    "Types of axis {0:d} are incompatible ({1}, {2})".format(
+                        i, ax1.get_type(), ax2.get_type()))
+            if ((ax1.get_type != 'regex')
+                and not all([abs(l - r) < precision for l, r in zip(
+                    ax1.get_bin_edges(convert=False),
+                    ax2.get_bin_edges(convert=False))])):
+                raise ValueError(
+                    "Edges do not match along axis {0:d}".format(i))
+            if ((ax1.get_type == 'regex')
+                and not all([l.pattern == r.pattern for l, r in zip(
+                    ax1.get_bin_edges(convert=False),
+                    ax2.get_bin_edges(convert=False))])):
+                raise ValueError(
+                    "Edges do not match along axis {0:d}".format(i))
+
+    def compatible(self, other, precision=1E-7):
+        try:
+            self.check_compatibility(other, precision=precision)
+        except (TypeError, ValueError):
+            return False
+        return True
+
+    def __add__(self, other):
+        copy = deepcopy(self)
+        copy += other
+        return copy
+
+    def __iadd__(self, other):
+        self.check_compatibility(other)
+        if isbasictype(other):
+            if other != 0:
+                for bin in self.bins():
+                    bin.value += other
+        else:
+            # The bins were found to be compatible, so we can just
+            # iterate through all of them adding them one by one
+            for b_this, b_other in zip(self.bins(), other.bins()):
+                b_this += b_other
+        return self
+
+    def __sub__(self, other):
+        copy = deepcopy(self)
+        copy -= other
+        return copy
+
+    def __isub__(self, other):
+        self.check_compatibility(other)
+        if isbasictype(other):
+            if other != 0:
+                for bin in self.bins():
+                    bin.value -= other
+        else:
+            # The bins were found to be compatible, so we can just
+            # iterate through all of them adding them one by one
+            for b_this, b_other in zip(self.bins(), other.bins()):
+                b_this -= b_other
+        return self
+
+    def __mul__(self, other):
+        copy = deepcopy(self)
+        copy *= other
+        return copy
+
+    def __imul__(self, other):
+        self.check_compatibility(other)
+        if isbasictype(other):
+            if other != 0:
+                for bin in self.bins():
+                    bin.value *= other
+        else:
+            # The bins were found to be compatible, so we can just
+            # iterate through all of them adding them one by one
+            for b_this, b_other in zip(self.bins(), other.bins()):
+                b_this *= b_other
+        return self
+
+    def __div__(self, other):
+        copy = deepcopy(self)
+        copy /= other
+        return copy
+
+    def __idiv__(self, other):
+        self.check_compatibility(other)
+        if isbasictype(other):
+            if other != 0:
+                for bin in self.bins():
+                    bin.value /= other
+        else:
+            # The bins were found to be compatible, so we can just
+            # iterate through all of them adding them one by one
+            for b_this, b_other in zip(self.bins(), other.bins()):
+                b_this /= b_other
+        return self
 
 
 def Hist1D(*args, **kwargs):

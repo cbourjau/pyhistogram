@@ -28,3 +28,7 @@ class UTC(tzinfo):
         return timedelta(0)
 
 
+def isbasictype(thing):
+    """Is this thing a basic builtin numeric type?
+    """
+    return isinstance(thing, (float, int, long))
