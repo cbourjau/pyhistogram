@@ -14,7 +14,7 @@ def _convert_datetimes_to_unix_time(v):
     """Convert the given datetime or list of datetimes to unix time stamps.
 
     If v is not a datetime, return it unchanged
-    
+
     Parameters
     ----------
     v : datetime
