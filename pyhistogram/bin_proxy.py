@@ -105,35 +105,40 @@ class Bin_proxy(object):
         """
         return self.hist.Bin_container.set_bin_error(self.idx)
 
-    @property
-    def effective_entries(self):
-        """
-        Number of effective entries in this bin.
-        The number of unweighted entries this bin would need to
-        contain in order to have the same statistical power as this
-        bin with possibly weighted entries, estimated by:
+    # @property
+    # def effective_entries(self):
+    #     """
+    #     Number of effective entries in this bin.
+    #     The number of unweighted entries this bin would need to
+    #     contain in order to have the same statistical power as this
+    #     bin with possibly weighted entries, estimated by:
 
-            (sum of weights) ** 2 / (sum of squares of weights)
+    #         (sum of weights) ** 2 / (sum of squares of weights)
 
-        """
-        sum_w2 = self.sum_w2
-        if sum_w2 == 0:
-            return abs(self.value)
-        return (self.value ** 2) / sum_w2
+    #     """
+    #     sum_w2 = self.sum_w2
+    #     if sum_w2 == 0:
+    #         return abs(self.value)
+    #     return (self.value ** 2) / sum_w2
 
     def __iadd__(self, other):
         self.value += other.value
-        self.sum_w2 += other.sum_w2
+        #self.sum_w2 += other.sum_w2
+        return self
+
+    def __isub__(self, other):
+        self.value -= other.value
+        #self.sum_w2 += other.sum_w2
         return self
 
     def __imul__(self, other):
         self.value *= other.value
-        self.sum_w2 *= other.sum_w2
+        #self.sum_w2 *= other.sum_w2
         return self
 
     def __idiv__(self, other):
         self.value /= other.value
-        self.sum_w2 /= other.sum_w2
+        #self.sum_w2 /= other.sum_w2
         return self
 
     def __repr__(self):
