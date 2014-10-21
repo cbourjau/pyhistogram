@@ -145,3 +145,134 @@ class Test_Hist_3D(unittest.TestCase):
             [b.y.regex for b in h.bins()]
         except:
             self.assertTrue(False)
+
+
+class Test_Hist_compatibilities(unittest.TestCase):
+    def test_hists_with_wrong_dimensions(self):
+        h1d = Hist(4, 0, 1)
+        h2d = Hist(4, 0, 1, 4, 0, 1)
+        self.assertRaises(TypeError, h1d.check_compatibility, h2d)
+        self.assertRaises(TypeError, h2d.check_compatibility, h1d)
+
+    def test_hists_with_right_dim_wrong_nbins(self):
+        h1 = Hist(4, 0, 1)
+        h2 = Hist(5, 0, 1)
+        self.assertRaises(ValueError, h1.check_compatibility, h2)
+        self.assertRaises(ValueError, h2.check_compatibility, h1)
+
+    def test_wrong_dtype(self):
+        h1 = Hist(4, 0, 1)
+        h2 = Hist(['quite', 'cool', 'regex', 'hist'])
+        self.assertRaises(TypeError, h1.check_compatibility, h2)
+        self.assertRaises(TypeError, h2.check_compatibility, h1)
+
+    def test_compatible_hists(self):
+        h1 = Hist(4, 0, 1, 4, 0, 1)
+        h2 = Hist(4, 0, 1, 4, 0, 1)
+        nothing_raised = True
+        try:
+            h1.check_compatibility(h2)
+            h2.check_compatibility(h1)
+        except:
+            nothing_raised = False
+        self.assertTrue(nothing_raised)
+
+
+class Test_Hist_add(unittest.TestCase):
+    def test_1d(self):
+        h1 = Hist(2, 0, 1)
+        h2 = Hist(2, 0, 1)
+        h1.fill(0.3)
+        h2.fill(0.6)
+        h3 = h1 + h2
+        self.assertEqual([b.value for b in h1.bins()], [1, 0])
+        self.assertEqual([b.value for b in h2.bins()], [0, 1])
+        self.assertEqual([b.value for b in h3.bins()], [1, 1])
+        h1 += h2
+        self.assertEqual([b.value for b in h1.bins()], [1, 1])
+
+    def test_3d(self):
+        h1 = Hist(2, 0, 1, 2, 0, 1, 2, 0, 1)
+        h2 = Hist(2, 0, 1, 2, 0, 1, 2, 0, 1)
+        h1.fill(0, 0, 0)
+        h2.fill(.9, .9, .9)
+        h3 = h1 + h2
+        h1 += h2
+        self.assertEqual([b.value for b in h1.bins()],
+                         [b.value for b in h3.bins()])
+
+
+class Test_Hist_sub(unittest.TestCase):
+    def test_1d(self):
+        h1 = Hist(2, 0, 1)
+        h2 = Hist(2, 0, 1)
+        h1.fill(0.3)
+        h2.fill(0.6)
+        h3 = h1 - h2
+        self.assertEqual([b.value for b in h1.bins()], [1, 0])
+        self.assertEqual([b.value for b in h2.bins()], [0, 1])
+        self.assertEqual([b.value for b in h3.bins()], [1, -1])
+        h1 -= h2
+        self.assertEqual([b.value for b in h1.bins()], [1, -1])
+
+    def test_3d(self):
+        h1 = Hist(2, 0, 1, 2, 0, 1, 2, 0, 1)
+        h2 = Hist(2, 0, 1, 2, 0, 1, 2, 0, 1)
+        h1.fill(0, 0, 0)
+        h2.fill(.9, .9, .9)
+        h3 = h1 - h2
+        h1 -= h2
+        self.assertEqual([b.value for b in h1.bins()],
+                         [b.value for b in h3.bins()])
+
+
+class Test_Hist_mul(unittest.TestCase):
+    def test_1d(self):
+        h1 = Hist(2, 0, 1)
+        h2 = Hist(2, 0, 1)
+        h1.fill(0.3, weight=.5)
+        h1.fill(0.6, weight=.5)
+        h2.fill(0.6, weight=.5)
+        h3 = h1 * h2
+        self.assertEqual([b.value for b in h1.bins()], [.5, .5])
+        self.assertEqual([b.value for b in h2.bins()], [0, .5])
+        self.assertEqual([b.value for b in h3.bins()], [0, .25])
+        h1 *= h2
+        self.assertEqual([b.value for b in h1.bins()], [0, .25])
+
+    def test_3d(self):
+        h1 = Hist(2, 0, 1, 2, 0, 1, 2, 0, 1)
+        h2 = Hist(2, 0, 1, 2, 0, 1, 2, 0, 1)
+        h1.fill(0, 0, 0)
+        h2.fill(.9, .9, .9)
+        h3 = h1 * h2
+        h1 *= h2
+        self.assertEqual([b.value for b in h1.bins()],
+                         [b.value for b in h3.bins()])
+
+
+class Test_Hist_div(unittest.TestCase):
+    def test_1d(self):
+        h1 = Hist(2, 0, 1)
+        h2 = Hist(2, 0, 1)
+        h1.fill(0.3, weight=.5)
+        h1.fill(0.6, weight=.5)
+        h2.fill(0.3, weight=.5)
+        h2.fill(0.6, weight=.5)
+        h3 = h1 / h2
+        self.assertEqual([b.value for b in h1.bins()], [.5, .5])
+        self.assertEqual([b.value for b in h2.bins()], [.5, .5])
+        self.assertEqual([b.value for b in h3.bins()], [1.0, 1.0])
+        h1 /= h2
+        self.assertEqual([b.value for b in h1.bins()], [1.0, 1.0])
+
+    def test_3d(self):
+        h1 = Hist(2, 0, 1, 2, 0, 1, 2, 0, 1)
+        h2 = Hist(2, 0, 1, 2, 0, 1, 2, 0, 1)
+        for b1, b2 in zip(h1.bins(), h2.bins()):
+            b1.value = 2.0
+            b2.value = 4.0
+        h3 = h1 / h2
+        h1 /= h2
+        self.assertEqual([b.value for b in h1.bins()],
+                         [b.value for b in h3.bins()])
