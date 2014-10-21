@@ -145,14 +145,27 @@ class Hist(object):
             return None
         values = [bin.value for bin in self.bins()]
         if self.Xaxis.dtype == 'datetime':
-            center = dates.date2num([bin.x.center for bin in self.bins()])
-            ret =  plt.bar(center, values, align='center', **kwargs)
+            centers = dates.date2num([bin.x.center for bin in self.bins()])
+            edges = dates.date2num(self.Xaxis.get_bin_edges())
+            widths = [c_right - c_left for
+                      c_right, c_left in zip(edges[1:], edges[:-1])]
+            ret = plt.bar(centers, values, width=widths,
+                          align='center', **kwargs)
             plt.gca().xaxis_date()
             plt.gcf().autofmt_xdate()
-        else:
-            center = [bin.x.center for bin in self.bins()]
+        elif self.Xaxis.dtype == 'numerical':
+            centers = [bin.x.center for bin in self.bins()]
             width = [bin.x.width for bin in self.bins()]
-            ret =  plt.bar(center, values, align='center', width=width, **kwargs)  
+            ret =  plt.bar(centers, values, align='center', width=width, **kwargs)
+        else:
+            centers = range(len(values))
+            names = [b.x.regex for b in self.bins()]
+            width = 1
+            ret = plt.bar(centers, values, align='center', width=width, **kwargs)
+            ax = plt.gca()
+            ax.set_xticks([x for x in range(len(centers))])
+            ax.set_xticklabels(
+                names, rotation=45, rotation_mode="anchor", ha="right")
         return ret
 
 
