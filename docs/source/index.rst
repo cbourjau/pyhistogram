@@ -7,8 +7,6 @@
 Welcome to pyhistogram's documentation
 =======================================
 
-.. include:: ../../README.rst
-   :start-line: 6
 
 Contents:
 =========
@@ -16,6 +14,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   quick_overview
+   auto_examples/index
    modules
    build_docs
 
