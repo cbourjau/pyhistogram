@@ -178,6 +178,32 @@ class Test_Hist_compatibilities(unittest.TestCase):
         self.assertTrue(nothing_raised)
 
 
+class Test_bin_iterator(unittest.TestCase):
+    def test_bin_iterator_2D(self):
+        h = Hist(3, 0, 1, 3, 0, 1)
+        self.assertEqual(len([b for b in h.bins()]), 9)
+        self.assertEqual([b.x.axis_bin_number for b in h.bins()],
+                         [1, 2, 3, 1, 2, 3, 1, 2, 3])
+        self.assertEqual([b.y.axis_bin_number for b in h.bins()],
+                         [1, 1, 1, 2, 2, 2, 3, 3, 3])
+
+    def test_bin_iterator_3D(self):
+        h = Hist(3, 0, 1, 3, 0, 1, 3, 0, 1)
+        self.assertEqual(len([b for b in h.bins()]), 27)
+        self.assertEqual([b.x.axis_bin_number for b in h.bins()],
+                         [1, 2, 3, 1, 2, 3, 1, 2, 3,
+                          1, 2, 3, 1, 2, 3, 1, 2, 3,
+                          1, 2, 3, 1, 2, 3, 1, 2, 3])
+        self.assertEqual([b.y.axis_bin_number for b in h.bins()],
+                         [1, 1, 1, 2, 2, 2, 3, 3, 3,
+                          1, 1, 1, 2, 2, 2, 3, 3, 3,
+                          1, 1, 1, 2, 2, 2, 3, 3, 3])
+        self.assertEqual([b.z.axis_bin_number for b in h.bins()],
+                         [1, 1, 1, 1, 1, 1, 1, 1, 1,
+                          2, 2, 2, 2, 2, 2, 2, 2, 2,
+                          3, 3, 3, 3, 3, 3, 3, 3, 3])
+
+
 class Test_Hist_add(unittest.TestCase):
     def test_1d(self):
         h1 = Hist(2, 0, 1)

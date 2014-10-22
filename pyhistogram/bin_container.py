@@ -78,15 +78,21 @@ class Bin_container(object):
         """
         # imagine a 3d block of bins curled up in a 1D array with above formular.
         # Work with mod to find the "layer of the current bin
-        z_level, rem = divmod(gidx, self.I*self.J)
+        # add one layer to avoid z_level == 0
+        z_level, rem = divmod(gidx + self.I*self.J, self.I*self.J)
         # check if the last level is exactly full or if the next level is started:
-        k = z_level + 1 if rem > 0 else z_level
+        if rem == 0:
+            k = z_level - 1
+            return self.I, self.J, k
+        k = z_level
         # if the x-y plane is completely filled (rem==0):
         # the x and the y indices must be maximal
-        y_level, rem = divmod(rem, self.I)
-        j = y_level + 1 if rem > 0 else self.J
-
-        i = rem if rem > 0 else self.I
+        y_level, rem = divmod(rem + self.I, self.I)
+        if rem == 0:
+            j = y_level - 1
+            return self.I, j, k
+        j = y_level
+        i = rem
         return i, j, k
 
     def fill_bin(self, gidx, weight=1):
