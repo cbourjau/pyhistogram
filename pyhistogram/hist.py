@@ -10,6 +10,7 @@ from pyhistogram.utils import isbasictype
 
 from copy import deepcopy
 
+
 class Hist(object):
     def __init__(self, *args):
         """Initialization of a one dimensional histogram

@@ -162,12 +162,15 @@ class Bin_proxy(object):
                    Upper edge of this bin.
                 width : float or datetime.timedelta
                    Width of this bin.
+                axis_bin_number : int
+                   Bin number on this axis (eg. `i` if it is the x axis)
                 """
                 axis = self.hist.axes[ax]
                 low = axis.get_bin_low_edge(ax_idx)
                 center = axis.get_bin_center(ax_idx)
                 high = axis.get_bin_up_edge(ax_idx)
                 width = axis.get_bin_width(ax_idx)
+                axis_bin_number = ax_idx
             return Bin_info
         else:
             class Bin_info:
@@ -179,7 +182,10 @@ class Bin_proxy(object):
                    Axis from which this Bin_info class was created
                 regex : str
                    Regex pattern of this bin
+                axis_bin_number : int
+                   Bin number on this axis (eg. `i` if it is the x axis)
                 """
                 axis = self.hist.axes[ax]
                 regex = axis.get_bin_regex(ax_idx).pattern
+                axis_bin_number = ax_idx
             return Bin_info
