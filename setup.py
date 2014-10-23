@@ -23,7 +23,7 @@ setup(
         "Development Status :: 3 - Alpha",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    # install_requires=['numpy', 'matplotlib'],
+    install_requires=['numpy>=1.8'],
     extras_require={
         'plotting':  ["matplotlib"]
     },

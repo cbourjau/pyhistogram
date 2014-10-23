@@ -145,6 +145,13 @@ class Test_Hist_3D(unittest.TestCase):
         except:
             self.assertTrue(False)
 
+    def test_integral(self):
+        h2d = Hist(4, 0, 1, 4, 0, 1)
+        self.assertEqual(h2d.get_integral(), 0)
+        h2d.fill(.5, .5)
+        self.assertEqual(h2d.get_integral(), 1)
+        h2d.fill(.5, .5, weight=3)
+        self.assertEqual(h2d.get_integral(), 4)
 
 class Test_Hist_compatibilities(unittest.TestCase):
     def test_hists_with_wrong_dimensions(self):

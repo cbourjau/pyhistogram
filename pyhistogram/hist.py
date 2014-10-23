@@ -150,6 +150,10 @@ class Hist(object):
         """
         return self.Bin_container.values
 
+    def get_integral(self):
+        """Returns the sum of all bins in this histogram."""
+        return np.sum(self.get_content())
+
     def plot(self, **kwargs):
         """Plot the current histogram.
 
