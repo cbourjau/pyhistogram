@@ -6,19 +6,20 @@ class Bin_proxy(object):
       >>> for bin in h.bins():
       ...     print bin.center
     """
-    def __init__(self, hist, gidx):
+    def __init__(self, hist, indices):
         """Initialization of a new Bin_proxy.
 
         Parameters
         ----------
         hist : pyhistogram.Hist
            Parent histogram to which this bin belongs
-        gidx : int
-           Global bin index
+        indices : tuple
+           axis bin numbers i, j, k
         """
+        if not isinstance(indices, tuple):
+            raise TypeError("Indices not a tuple")
         self.hist = hist
-        self.gidx = gidx
-        self.ijk = self.axial_indices
+        self.ijk = indices
 
     @property
     def axial_indices(self):
@@ -31,7 +32,7 @@ class Bin_proxy(object):
         tuple :
            Tuple of the three axial indices (i, j, k)
         """
-        return self.hist.Bin_container.get_ijk_from_global_bin(self.gidx)
+        return self.ijk
 
     @property
     def x(self):
@@ -71,7 +72,7 @@ class Bin_proxy(object):
         ------
         float
         """
-        return self.hist.Bin_container.get_bin_content(self.gidx)
+        return self.hist.Bin_container.get_bin_content(self.ijk)
 
     @value.setter
     def value(self, v):
@@ -82,28 +83,28 @@ class Bin_proxy(object):
         v : int or float
            New value of this bin
         """
-        self.hist.Bin_container.set_bin_content(self.gidx, v)
+        self.hist.Bin_container.set_bin_content(self.ijk, v)
 
-    @property
-    def error(self):
-        """Return the error of this bin.
+    # @property
+    # def error(self):
+    #     """Return the error of this bin.
 
-        Return
-        ------
-        float
-        """
-        return self.hist.Bin_container.get_bin_error(self.idx)
+    #     Return
+    #     ------
+    #     float
+    #     """
+    #     return self.hist.Bin_container.get_bin_error(self.idx)
 
-    @error.setter
-    def error(self, e):
-        """Replace the bin's error with the given value v.
+    # @error.setter
+    # def error(self, e):
+    #     """Replace the bin's error with the given value v.
 
-        Parameters
-        ----------
-        v : int or float
-           New value of this bin
-        """
-        return self.hist.Bin_container.set_bin_error(self.idx)
+    #     Parameters
+    #     ----------
+    #     v : int or float
+    #        New value of this bin
+    #     """
+    #     return self.hist.Bin_container.set_bin_error(self.idx)
 
     # @property
     # def effective_entries(self):
@@ -143,7 +144,7 @@ class Bin_proxy(object):
 
     def __repr__(self):
         return '{0}({1}, {2})'.format(
-            self.__class__.__name__, self.hist, self.gidx)
+            self.__class__.__name__, self.hist, self.ijk)
 
     def axis_bininfo(self, ax, ax_idx):
         if self.hist.axes[ax].dtype != 'regex':

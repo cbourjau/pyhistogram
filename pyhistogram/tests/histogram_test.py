@@ -131,7 +131,6 @@ class Test_Hist_3D(unittest.TestCase):
                y='str2', z=0.0)
         # the one filled bin:
         v = [(b.x.low, b.y.regex, b.z.low) for b in h.bins() if b.value==1]
-        print v
         self.assertEqual(len(v), 1)
         utc = UTC()
         self.assertEqual(v, [(datetime(2014, 1, 1, 13, 0, tzinfo=utc),
@@ -183,25 +182,25 @@ class Test_bin_iterator(unittest.TestCase):
         h = Hist(3, 0, 1, 3, 0, 1)
         self.assertEqual(len([b for b in h.bins()]), 9)
         self.assertEqual([b.x.axis_bin_number for b in h.bins()],
-                         [1, 2, 3, 1, 2, 3, 1, 2, 3])
+                         [0, 0, 0, 1, 1, 1, 2, 2, 2])
         self.assertEqual([b.y.axis_bin_number for b in h.bins()],
-                         [1, 1, 1, 2, 2, 2, 3, 3, 3])
+                         [0, 1, 2, 0, 1, 2, 0, 1, 2])
 
     def test_bin_iterator_3D(self):
         h = Hist(3, 0, 1, 3, 0, 1, 3, 0, 1)
         self.assertEqual(len([b for b in h.bins()]), 27)
         self.assertEqual([b.x.axis_bin_number for b in h.bins()],
-                         [1, 2, 3, 1, 2, 3, 1, 2, 3,
-                          1, 2, 3, 1, 2, 3, 1, 2, 3,
-                          1, 2, 3, 1, 2, 3, 1, 2, 3])
+                         [0, 0, 0, 0, 0, 0, 0, 0, 0,
+                          1, 1, 1, 1, 1, 1, 1, 1, 1,
+                          2, 2, 2, 2, 2, 2, 2, 2, 2])
         self.assertEqual([b.y.axis_bin_number for b in h.bins()],
-                         [1, 1, 1, 2, 2, 2, 3, 3, 3,
-                          1, 1, 1, 2, 2, 2, 3, 3, 3,
-                          1, 1, 1, 2, 2, 2, 3, 3, 3])
+                         [0, 0, 0, 1, 1, 1, 2, 2, 2,
+                          0, 0, 0, 1, 1, 1, 2, 2, 2,
+                          0, 0, 0, 1, 1, 1, 2, 2, 2])
         self.assertEqual([b.z.axis_bin_number for b in h.bins()],
-                         [1, 1, 1, 1, 1, 1, 1, 1, 1,
-                          2, 2, 2, 2, 2, 2, 2, 2, 2,
-                          3, 3, 3, 3, 3, 3, 3, 3, 3])
+                         [0, 1, 2, 0, 1, 2, 0, 1, 2,
+                          0, 1, 2, 0, 1, 2, 0, 1, 2,
+                          0, 1, 2, 0, 1, 2, 0, 1, 2])
 
 
 class Test_Hist_add(unittest.TestCase):

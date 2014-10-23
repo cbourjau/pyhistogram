@@ -9,6 +9,7 @@ from pyhistogram.bin_proxy import Bin_proxy
 from pyhistogram.utils import isbasictype
 
 from copy import deepcopy
+import numpy as np
 
 
 class Hist(object):
@@ -85,17 +86,18 @@ class Hist(object):
         >>> h = Hist(10, 0, 1)
         >>> h.fill(2.5, weight=0.5)
         """
+        indices = []
         try:
             # bin numbers start at 1
-            xbin_number = self.Xaxis.find_axis_bin(x)
-            ybin_number = self.Yaxis.find_axis_bin(y) if y else 1
-            zbin_number = self.Zaxis.find_axis_bin(z) if z else 1
+            indices.append(self.Xaxis.find_axis_bin(x) - 1)
+            if y is not None:
+                indices.append(self.Yaxis.find_axis_bin(y) - 1)
+            if z is not None:
+                indices.append(self.Zaxis.find_axis_bin(z) - 1)
         except (UnderflowException, OverflowException):
             self.overflow += 1
         else:
-            gbin_number = self.Bin_container.get_global_bin_from_ijk(
-                xbin_number, ybin_number, zbin_number)
-            self.Bin_container.fill_bin(gbin_number, weight=weight)
+            self.Bin_container.fill_bin(tuple(indices), weight=weight)
 
     def get_overflow(self):
         """Return overflow of the entire histogram.
@@ -119,19 +121,34 @@ class Hist(object):
         Bin_proxy:
            A class giving easy access to all the information of this bin.
         """
-        n_total = self.Bin_container.nbins
         # remember, gidx starts at 1!
-        for gidx in range(1, n_total+1):
-            yield Bin_proxy(self, gidx)
+        for indices in np.ndindex(*[a.nbins for a in self.axes]):
+            yield Bin_proxy(self, indices)
 
-    def get_dimensions(self):
-        """Returns the number of dimensions of this histogram.
+    def get_shape(self):
+        """Returns the number of bins along each axis.
 
         Return
         ------
-        int
+        tuple
         """
-        return len(self.axes)
+        return self.Bin_container.values.shape
+
+    def get_content(self):
+        """Return the content of the histogram as an array with dimensionality
+        corresponding to the Histograms dimensions.
+
+        For two dimensional histograms, the returned grid is compatible with
+        the format needed for the matplotlib pcolormesh function. The bins
+        values V are organized in a N_x x N_y grid where the indices i, j
+        in V[i][j] are the axis_bin_number of the x (y) dimension.
+
+        Return
+        ------
+        2-dim-array
+           Meshgrid of the bin values
+        """
+        return self.Bin_container.values
 
     def plot(self, **kwargs):
         """Plot the current histogram.
@@ -202,8 +219,10 @@ class Hist(object):
            If the histogram sizes, number of bins along an axis or
            the bin edges do not match.
         """
-        if self.get_dimensions() != other.get_dimensions():
+        if len(self.get_shape()) != len(other.get_shape()):
             raise TypeError("histogram dimensionalities do not match")
+        if self.get_shape() != other.get_shape():
+            raise ValueError("Number of bins do not match.")
         for i, (ax1, ax2) in enumerate(zip(self.axes, other.axes)):
             if ax1.nbins != ax2.nbins:
                 raise ValueError(

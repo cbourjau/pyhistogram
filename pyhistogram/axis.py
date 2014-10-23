@@ -181,7 +181,7 @@ class Axis(object):
         ------
         array_like
         """
-        return self._edges[i-1]
+        return self._edges[i]
 
     def get_bin_edges(self, convert=True):
         """Returns the edges of the bins along this axis.
@@ -217,7 +217,7 @@ class Axis(object):
         ------
         array_like
         """
-        return self.get_bin_edges(convert)[i-1]
+        return self.get_bin_edges(convert)[i]
 
     def get_bin_up_edge(self, i, convert=True):
         """Returns only the upper bin edge of for a given axis-bin number.
@@ -227,13 +227,14 @@ class Axis(object):
         Parameters
         ----------
         convert : bool
-           If true, the returned value will be converted to the appropriate type of the axis (e.g. datetime)
+           If true, the returned value will be converted to the appropriate
+           type  of the axis (e.g. datetime)
 
         Return
         ------
         array_like
         """
-        return self.get_bin_edges(convert)[i]
+        return self.get_bin_edges(convert)[i+1]
 
     def get_bin_center(self, i):
         """Returns the center of the given bin, if appropriate converted

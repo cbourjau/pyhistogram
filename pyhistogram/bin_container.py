@@ -1,5 +1,5 @@
 from math import sqrt
-
+import numpy as np
 
 class Bin_container(object):
     """
@@ -20,7 +20,7 @@ class Bin_container(object):
     The bin container class does not deal with the finding of bins in user defined units. It exclusively deals with bin numbers and leaves the user defined bin sizes and units to the axis class.
 """
 
-    def __init__(self, nxbins, nybins=1, nzbins=1):
+    def __init__(self, nxbins, nybins=0, nzbins=0):
         """Initialization of the Bin_container.
 
         Parameters
@@ -28,12 +28,18 @@ class Bin_container(object):
         nxbins, nybins, nzbins : int
            Number of bins along each axis. Must be greater than 1
         """
-        if (nxbins < 1 or nybins < 1 or nzbins < 1) or (
-                (nybins == 1 and nzbins > 1)):
-            raise ValueError('Invalid number of bins given')
+        if  ((nybins < 1 and nzbins > 0)):
+            raise ValueError('z-axis specified without y-axis.')
+        if nybins == 0 and nzbins == 0:
+            self.values = np.zeros((nxbins, ))
+        elif nybins != 0 and nzbins == 0:
+            self.values = np.zeros((nxbins, nybins))
+        elif nybins != 0 and nzbins != 0:
+            self.values = np.zeros((nxbins, nybins, nzbins))
         self.I, self.J, self.K = nxbins, nybins, nzbins
         # Each bin has (value, sum_w2)
         self._bins = [[0, 0] for i in range(self.I*self.J*self.K)]
+
 
     @property
     def nbins(self):
@@ -43,122 +49,47 @@ class Bin_container(object):
         ------
         int
         """
-        return len(self._bins)
+        return reduce(lambda x, y: x*y, self.values.shape)
 
-    def get_global_bin_from_ijk(self, i, j=1, k=1):
-        """Returns the global bin number given the axis bin numbers.
-        
-        The axis bin numbers are denoted as i, j, k for the x, y and z axis respectively. They are element of [1, N] where N is I, J, or K respectively.
-
-        Parameters
-        ----------
-        i : int
-           Local bin number of the x axis
-        j,k : int, optional
-           Local bin numbers of the y and z axis. (Default 1)
-
-        Return
-        ------
-        int
-        """
-        return ((k - 1) * self.J + j - 1) * self.I + i
-
-    def get_ijk_from_global_bin(self, gidx):
-        """Returns the local bin numbers for each axis given the global bin number.
-
-        Parameters
-        ----------
-        gidx : int
-           Global bin number
-
-        Return
-        ------
-        tuple :
-           The three axis bin numbers (i, j, k)
-        """
-        # imagine a 3d block of bins curled up in a 1D array with above formular.
-        # Work with mod to find the "layer of the current bin
-        # add one layer to avoid z_level == 0
-        z_level, rem = divmod(gidx + self.I*self.J, self.I*self.J)
-        # check if the last level is exactly full or if the next level is started:
-        if rem == 0:
-            k = z_level - 1
-            return self.I, self.J, k
-        k = z_level
-        # if the x-y plane is completely filled (rem==0):
-        # the x and the y indices must be maximal
-        y_level, rem = divmod(rem + self.I, self.I)
-        if rem == 0:
-            j = y_level - 1
-            return self.I, j, k
-        j = y_level
-        i = rem
-        return i, j, k
-
-    def fill_bin(self, gidx, weight=1):
+    def fill_bin(self, indices, weight=1):
         """Increment the value of the given bin by the given weight
 
         Parameters
         ----------
-        gidx : int
-           Global bin number
+        indices : tuple
+           axis bin numbers i, j, k
 
         Return
         ------
         None
         """
         # remember the -1 to convert bin number to index!
-        self._bins[gidx - 1][0] += weight
+        # import ipdb; ipdb.set_trace()
+        self.values[indices] += weight
 
-    def get_bin_content(self, gidx):
+    def get_bin_content(self, indices):
         """Returns the content of a given bin.
 
         Parameters
         ----------
-        gidx : int
-           Global bin number
+        indices : tuple
+           axis bin numbers i, j, k
 
         Return
         ------
         float
         """
         # remember, gidx starts at 1!
-        return self._bins[gidx-1][0]
+        return self.values[indices]
 
-    def set_bin_content(self, gidx, v):
+    def set_bin_content(self, indices, v):
         """Replaces the content of a bin with the given value.
 
         Parameters
         ----------
-        gidx : int
-           Global bin number
+        indices : tuple
+           axis bin numbers i, j, k
         v : float
            New content of this bin
         """
-        self._bins[gidx-1][0] = v
-
-    def get_bin_error(self, gidx):
-        """Returns the error of a given bin.
-
-        Parameters
-        ----------
-        gidx : int
-           Global bin number
-
-        Return
-        ------
-        float
-        """
-        return sqrt(self._bins[gidx][1])
-
-    def set_bin_error(self, gidx, e):
-        """Replaces the error of a bin with the given value.
-
-        Parameters
-        ----------
-        gidx : int
-           Global bin number
-        e : float
-           New error of this bin
-        """
-        self._bins[gidx][1] = e
+        self.values[indices] = v

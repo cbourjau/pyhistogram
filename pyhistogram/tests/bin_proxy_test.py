@@ -10,8 +10,8 @@ class Test_Bin_proxy(unittest.TestCase):
 
     def test_properties(self):
         h = Hist(10, 0, 10)
-        bp = Bin_proxy(h, 1)
-        self.assertEqual(bp.axial_indices, (1, 1, 1))
+        bp = Bin_proxy(h, (0, ))
+        self.assertEqual(bp.axial_indices, (0,))
         self.assertEqual(bp.x.low, 0)
         self.assertEqual(bp.x.center, 0.5)
         self.assertEqual(bp.x.high, 1)
@@ -20,13 +20,13 @@ class Test_Bin_proxy(unittest.TestCase):
 
     def test_operations(self):
         h = Hist(10, 0, 10)
-        bp1 = Bin_proxy(h, 1)
+        bp1 = Bin_proxy(h, (1,))
         bp1.value = 1
         bp1.value += 1
         self.assertEqual(bp1.value, 2)
         bp1.value *= 2
         self.assertEqual(bp1.value, 4)
-        bp2 = Bin_proxy(h, 2)
+        bp2 = Bin_proxy(h, (2, ))
         bp1.value, bp2.value = (2, 2)
         bp1.sum_w2, bp2.sum_w2 = (2, 2)
 
