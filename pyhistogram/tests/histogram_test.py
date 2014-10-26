@@ -54,6 +54,13 @@ class Test_Hist_1D(unittest.TestCase):
         h = Hist(['str1', 'str2', 'str3', 'str4'])
         patterns = [r.pattern for r in h.Xaxis.get_bin_regexes()]
         self.assertEqual(patterns, ['str1', 'str2', 'str3', 'str4'])
+        failed = False
+        # unicode string type
+        try: 
+            h = Hist([u'str1'])
+        except:
+            failed = True
+        self.assertFalse(failed)
 
     def test_filling_with_weights(self):
         h = Hist(4, 0, 4)

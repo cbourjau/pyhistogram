@@ -55,7 +55,7 @@ def _establish_dtype(v):
         return 'numerical'
     elif all(isinstance(x, datetime) for x in v):
         return 'datetime'
-    elif all(isinstance(x, str) for x in v):
+    elif all(isinstance(x, (str, unicode)) for x in v):
         return 'regex'
     else:
         raise ValueError('Inconsitancy in given types')
