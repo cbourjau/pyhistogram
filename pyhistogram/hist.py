@@ -261,16 +261,16 @@ class Hist(object):
                 raise TypeError(
                     "Types of axis {0:d} are incompatible ({1}, {2})".format(
                         i, ax1.get_type(), ax2.get_type()))
-            if ((ax1.get_type != 'regex')
+            if ((ax1.get_type() != 'regex')
                 and not all([abs(l - r) < precision for l, r in zip(
                     ax1.get_bin_edges(convert=False),
                     ax2.get_bin_edges(convert=False))])):
                 raise ValueError(
                     "Edges do not match along axis {0:d}".format(i))
-            if ((ax1.get_type == 'regex')
+            if ((ax1.get_type() == 'regex')
                 and not all([l.pattern == r.pattern for l, r in zip(
-                    ax1.get_bin_edges(convert=False),
-                    ax2.get_bin_edges(convert=False))])):
+                    ax1.get_bin_regexes(),
+                    ax2.get_bin_regexes())])):
                 raise ValueError(
                     "Edges do not match along axis {0:d}".format(i))
 

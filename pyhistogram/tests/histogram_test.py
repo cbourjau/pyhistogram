@@ -255,6 +255,14 @@ class Test_Hist_add(unittest.TestCase):
         h1 += h2
         self.assertEqual([b.value for b in h1.bins()], [1, 1])
 
+    def test_1d_regex(self):
+        h1 = Hist(['quite', 'cool', 'regex', 'hist'])
+        h2 = Hist(['quite', 'cool', 'regex', 'hist'])
+        h1.fill('cool')
+        h2.fill('cool')
+        h1 += h2
+        self.assertEqual([b.value for b in h1.bins()], [0, 2, 0, 0])
+
     def test_3d(self):
         h1 = Hist(2, 0, 1, 2, 0, 1, 2, 0, 1)
         h2 = Hist(2, 0, 1, 2, 0, 1, 2, 0, 1)
@@ -346,6 +354,6 @@ class Test_Hist_deepcopy(unittest.TestCase):
     def test_deepcopy_regex(self):
         from copy import deepcopy
         h = Hist(['quite', 'cool', 'regex', 'hist'])
-        h.fill(u'quite')
+        h.fill(u'quitee')
         h_new = deepcopy(h)
         self.assertTrue(np.array_equal(h_new.get_content(), h.get_content()))
