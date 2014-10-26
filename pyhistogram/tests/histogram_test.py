@@ -2,6 +2,7 @@ from pyhistogram.hist import Hist
 from pyhistogram.utils import UTC
 import unittest
 from datetime import datetime
+import numpy as np
 
 
 class Test_Hist_1D(unittest.TestCase):
@@ -339,3 +340,12 @@ class Test_Hist_div(unittest.TestCase):
         h1 /= h2
         self.assertEqual([b.value for b in h1.bins()],
                          [b.value for b in h3.bins()])
+
+
+class Test_Hist_deepcopy(unittest.TestCase):
+    def test_deepcopy_regex(self):
+        from copy import deepcopy
+        h = Hist(['quite', 'cool', 'regex', 'hist'])
+        h.fill(u'quite')
+        h_new = deepcopy(h)
+        self.assertTrue(np.array_equal(h_new.get_content(), h.get_content()))

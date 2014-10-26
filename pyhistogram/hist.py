@@ -281,6 +281,17 @@ class Hist(object):
             return False
         return True
 
+    def __deepcopy__(self, memo):
+        edges = []
+        for ax in self.axes:
+            if ax.dtype == 'regex':
+                edges.append([r.pattern for r in ax.get_bin_regexes()])
+            else:
+                edges.append(ax.get_bin_edges())
+        new_hist = Hist(*edges)
+        new_hist.Bin_container.values = deepcopy(self.Bin_container.values)
+        return new_hist
+
     def __add__(self, other):
         copy = deepcopy(self)
         copy += other
