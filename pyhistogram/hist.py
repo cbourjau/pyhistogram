@@ -154,6 +154,32 @@ class Hist(object):
         """Returns the sum of all bins in this histogram."""
         return np.sum(self.get_content())
 
+    def get_projection(self, axis):
+        """Returns the projection of this histogram along the given axis.
+
+        A projections sums up all the bins along the given axis.
+
+        Return
+        ------
+        pyhistogram.Hist
+           New histogram with one dimension less than the initial one
+
+        Example
+        -------
+        >>> h3d = Hist(4, 0, 1, 5, 0, 1, 6, 0, 1)
+        >>> h3d.fill(.5, .5, .5)
+        >>> h2d = h3d.get_projection(axis=0)  # along x-axis
+        >>> h2d.get_shape()
+            (5, 6)
+        """
+        edges = [a.get_bin_edges() for i, a in
+                 enumerate(self.axes) if i != axis]
+        proj = Hist(*edges)
+        values = np.sum(self.get_content(), axis)
+        for indices, v in np.ndenumerate(values):
+            proj.Bin_container.fill_bin(indices, weight=v)
+        return proj
+
     def plot(self, **kwargs):
         """Plot the current histogram.
 

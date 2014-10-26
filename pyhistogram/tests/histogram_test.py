@@ -82,6 +82,24 @@ class Test_Hist_2D(unittest.TestCase):
         self.assertEqual(h.Yaxis.get_bin_centers(), [0.125, 0.375, 0.625, 0.875])
         self.assertEqual(h.Yaxis.nbins, 4)
 
+    def test_integral(self):
+        h2d = Hist(4, 0, 1, 4, 0, 1)
+        self.assertEqual(h2d.get_integral(), 0)
+        h2d.fill(.5, .5)
+        self.assertEqual(h2d.get_integral(), 1)
+        h2d.fill(.5, .5, weight=3)
+        self.assertEqual(h2d.get_integral(), 4)
+
+    def test_projection(self):
+        h2d = Hist(4, 0, 1, 5, 0, 1)
+        h2d.fill(.5, .5)
+        h1d = h2d.get_projection(axis=0)  # along x-axis
+        self.assertEqual(h1d.get_shape(), (5,))
+        self.assertEqual(h1d.get_integral(), 1)
+        h1d = h2d.get_projection(axis=1)  # along y-axis
+        self.assertEqual(h1d.get_shape(), (4,))
+        self.assertEqual(h1d.get_integral(), 1)
+
 
 class Test_Hist_3D(unittest.TestCase):
     def test_init_fixed_width(self):
@@ -94,6 +112,19 @@ class Test_Hist_3D(unittest.TestCase):
         self.assertEqual(h.Yaxis.nbins, 4)
         self.assertEqual(h.Zaxis.get_bin_centers(), [0.125, 0.375, 0.625, 0.875])
         self.assertEqual(h.Zaxis.nbins, 4)
+
+    def test_projection(self):
+        h3d = Hist(4, 0, 1, 5, 0, 1, 6, 0, 1)
+        h3d.fill(.5, .5, .5)
+        h2d = h3d.get_projection(axis=0)  # along x-axis
+        self.assertEqual(h2d.get_shape(), (5, 6))
+        self.assertEqual(h2d.get_integral(), 1)
+        h2d = h3d.get_projection(axis=1)  # along y-axis
+        self.assertEqual(h2d.get_shape(), (4, 6))
+        self.assertEqual(h2d.get_integral(), 1)
+        h2d = h3d.get_projection(axis=2)  # along z-axis
+        self.assertEqual(h2d.get_shape(), (4, 5))
+        self.assertEqual(h2d.get_integral(), 1)
 
     def test_init_with_fixed_and_variable_bin_sizes(self):
         h = Hist(4, 0, 4,
@@ -152,13 +183,6 @@ class Test_Hist_3D(unittest.TestCase):
         except:
             self.assertTrue(False)
 
-    def test_integral(self):
-        h2d = Hist(4, 0, 1, 4, 0, 1)
-        self.assertEqual(h2d.get_integral(), 0)
-        h2d.fill(.5, .5)
-        self.assertEqual(h2d.get_integral(), 1)
-        h2d.fill(.5, .5, weight=3)
-        self.assertEqual(h2d.get_integral(), 4)
 
 class Test_Hist_compatibilities(unittest.TestCase):
     def test_hists_with_wrong_dimensions(self):
