@@ -142,18 +142,28 @@ class Axis(object):
         """
         return len(self._edges) - 1
 
-    def get_bin_centers(self):
+    def get_bin_centers(self, convert=True):
         """Returns the centers of the bins along this axis.
 
         This function is not available if the axis is of type 'regex'.
+
+        Parameters
+        ----------
+        convert : bool
+           If true, the returned value will be converted to the
+           appropriate type of the axis (e.g. datetime)
 
         Return
         ------
         array_like
         """
-        return convert_to_dtype(
-            [l + (u - l) / 2.0 for l, u in zip(self._edges, self._edges[1:])],
-            self.dtype)
+        if convert:
+            return convert_to_dtype(
+                [l + (u - l) / 2.0 for l, u in zip(
+                    self._edges, self._edges[1:])], self.dtype)
+        else:
+            return [l + (u - l) / 2.0 for l, u in zip(
+                    self._edges, self._edges[1:])]
 
     def get_bin_regexes(self):
         """Returns the regexes (not the patterns) of the bins along this axis.
@@ -191,7 +201,8 @@ class Axis(object):
         Parameters
         ----------
         convert : bool
-           If true, the returned value will be converted to the appropriate type of the axis (e.g. datetime)
+           If true, the returned value will be converted to the
+           appropriate type of the axis (e.g. datetime)
 
         Return
         ------
